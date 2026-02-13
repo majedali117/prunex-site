@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Prunex is an audit-grade AI governance gateway for regulated enterprises. Real-time policy enforcement and evidence across AI agents, tools, and LLMs." />
+  <title>Prunex — Audit‑grade AI Governance for Agents</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Prunex — Audit‑grade AI Governance for Agents" />
+  <meta property="og:description" content="Real‑time policy enforcement + immutable evidence across AI agents, tools, and LLMs." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #0d1430;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --faint: rgba(255,255,255,.45);
+      --line: rgba(255,255,255,.14);
+      --accent: #74f2c1;
+      --accent2: #7aa2ff;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1120px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background: radial-gradient(1000px 600px at 18% 12%, rgba(122,162,255,.22), transparent 60%),
+                  radial-gradient(900px 540px at 78% 22%, rgba(116,242,193,.18), transparent 60%),
+                  linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* subtle noise */
+    .noise::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity: .18;
+    }
+
+    /* Layout */
+    .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(11,16,32,.55);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 650;
+      letter-spacing: .2px;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(116,242,193,.9), rgba(122,162,255,.85));
+      box-shadow: 0 10px 30px rgba(116,242,193,.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* bracket-gateway mark */
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px 10px;
+      border: 2px solid rgba(11,16,32,.85);
+      border-top: 0;
+      border-bottom: 0;
+      border-radius: 10px;
+      transform: skewX(-6deg);
+    }
+    .mark::after {
+      inset: 8px 12px;
+      border-color: rgba(11,16,32,.65);
+      transform: skewX(6deg);
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .navlinks a { padding: 8px 10px; border-radius: 10px; }
+    .navlinks a:hover { background: rgba(255,255,255,.06); color: var(--text); }
+
+    .cta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22); }
+
+    .btn.primary {
+      border: 0;
+      background: linear-gradient(135deg, rgba(116,242,193,.95), rgba(122,162,255,.92));
+      color: rgba(11,16,32,.92);
+      box-shadow: 0 16px 45px rgba(122,162,255,.16);
+    }
+    .btn.primary:hover { transform: translateY(-1px); }
+
+    .pill {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: 13px;
+      width: fit-content;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 64px 0 28px;
+      position: relative;
+    }
+
+    .heroGrid {
+      display: grid;
+      grid-template-columns: 1.25fr .95fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    h1 {
+      margin: 14px 0 14px;
+      font-size: clamp(34px, 3.2vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.7px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 18px;
+      max-width: 60ch;
+    }
+
+    .heroActions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+
+    .heroCard {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+      padding: 18px;
+    }
+
+    .heroCardHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(11,16,32,.88);
+      background: rgba(116,242,193,.95);
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    .mini {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--faint);
+    }
+
+    .diagram {
+      background: rgba(11,16,32,.45);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .node {
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-size: 13px;
+      color: rgba(255,255,255,.86);
+    }
+
+    .node strong { display: block; font-size: 13px; }
+    .node span { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .arrow {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.80);
+      font-size: 14px;
+    }
+
+    .gate {
+      position: relative;
+      background: linear-gradient(135deg, rgba(116,242,193,.18), rgba(122,162,255,.16));
+      border: 1px solid rgba(116,242,193,.28);
+      box-shadow: 0 18px 50px rgba(116,242,193,.12);
+    }
+
+    .gate::before,
+    .gate::after {
+      content: "";
+      position: absolute;
+      inset: 10px 12px;
+      border: 2px solid rgba(255,255,255,.42);
+      border-top: 0;
+      border-bottom: 0;
+      border-radius: 14px;
+    }
+    .gate::after {
+      inset: 10px 16px;
+      border-color: rgba(255,255,255,.26);
+    }
+
+    .bullets {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .bullet {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.85);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 5px;
+      background: linear-gradient(135deg, rgba(116,242,193,.95), rgba(122,162,255,.92));
+      flex: 0 0 10px;
+    }
+
+    /* Sections */
+    section { padding: 64px 0; border-top: 1px solid rgba(255,255,255,.06); }
+    .sectionTitle {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(22px, 2.2vw, 32px);
+      letter-spacing: -0.4px;
+    }
+    .sub { color: var(--muted); max-width: 70ch; margin: 0; line-height: 1.6; }
+
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.25);
+    }
+
+    .card h3 { margin: 0 0 8px; font-size: 15px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 14px; }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+
+    .kpi {
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      padding: 16px;
+      min-height: 96px;
+    }
+
+    .kpi .value {
+      font-size: 22px;
+      letter-spacing: -0.4px;
+      font-weight: 750;
+    }
+
+    .kpi .label { color: var(--muted); margin-top: 6px; font-size: 13px; line-height: 1.45; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+    }
+
+    .badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(116,242,193,.95), rgba(122,162,255,.90));
+      display: grid;
+      place-items: center;
+      color: rgba(11,16,32,.92);
+      font-weight: 800;
+      flex: 0 0 30px;
+      box-shadow: 0 14px 30px rgba(122,162,255,.12);
+    }
+
+    .step h4 { margin: 0; font-size: 14px; }
+    .step p { margin: 4px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .item {
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      padding: 14px;
+    }
+    .item .top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .item .top b { font-size: 14px; }
+    .item .top span {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--faint);
+    }
+    .item p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 13.5px; }
+
+    /* Footer CTA */
+    .ctaBlock {
+      background: linear-gradient(135deg, rgba(116,242,193,.16), rgba(122,162,255,.14));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .ctaBlock h3 { margin: 0 0 8px; font-size: 18px; }
+    .ctaBlock p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+    form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(11,16,32,.55);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+    }
+    textarea { min-height: 92px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,.45); }
+
+    .fineprint { color: rgba(255,255,255,.55); font-size: 12.5px; line-height: 1.5; }
+
+    footer {
+      padding: 22px 0 40px;
+      color: rgba(255,255,255,.55);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 920px) {
+      .heroGrid, .split, .ctaBlock, .kpis { grid-template-columns: 1fr; }
+      .grid3 { grid-template-columns: 1fr; }
+      .navlinks { display: none; }
+    }
+
+    /* Motion */
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal { opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+      .reveal.show { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobile menu */
+    .menuBtn { display: none; }
+    @media (max-width: 920px) {
+      .menuBtn { display: inline-flex; }
+      .mobile {
+        display: none;
+        border-top: 1px solid rgba(255,255,255,.08);
+        padding: 10px 0 14px;
+      }
+      .mobile a {
+        display: block;
+        padding: 10px 10px;
+        border-radius: 12px;
+        color: var(--muted);
+      }
+      .mobile a:hover { background: rgba(255,255,255,.06); color: var(--text); }
+      .mobile.show { display: block; }
+    }
+  </style>
+</head>
+
+<body class="noise">
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="Prunex">
+        <div class="mark" aria-hidden="true"></div>
+        <span>Prunex</span>
+      </a>
+
+      <nav class="navlinks" aria-label="Primary">
+        <a href="#problem">Problem</a>
+        <a href="#solution">Solution</a>
+        <a href="#how">How it works</a>
+        <a href="#usecases">Use cases</a>
+        <a href="#team">Team</a>
+      </nav>
+
+      <div class="cta">
+        <button class="btn menuBtn" id="menuBtn" type="button" aria-label="Open menu">Menu</button>
+        <a class="btn" href="#contact">Request a pilot</a>
+        <a class="btn primary" href="#contact">Talk to us</a>
+      </div>
+    </div>
+
+    <div class="container mobile" id="mobileNav" aria-label="Mobile">
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#how">How it works</a>
+      <a href="#usecases">Use cases</a>
+      <a href="#team">Team</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="container hero">
+      <div class="heroGrid">
+        <div>
+          <div class="pill reveal">
+            <span style="width:8px;height:8px;border-radius:99px;background:var(--accent);"></span>
+            <span>Audit‑grade governance for AI agents & LLM workflows</span>
+          </div>
+
+          <h1 class="reveal">Control AI in production — with policies you can prove.</h1>
+          <p class="lead reveal">
+            Prunex is a policy governance gateway that sits between your apps, AI agents, tools, and LLMs.
+            Enforce versioned policies in real time (allow / block / redact / observe) and export audit‑ready evidence.
+          </p>
+
+          <div class="heroActions reveal">
+            <a class="btn primary" href="#contact">Request a pilot</a>
+            <a class="btn" href="#solution">See how it works</a>
+          </div>
+
+          <div class="kpis reveal" style="margin-top:18px;">
+            <div class="kpi">
+              <div class="value">Runtime enforcement</div>
+              <div class="label">Policies applied at the moment data moves — not just in documents or best‑effort prompts.</div>
+            </div>
+            <div class="kpi">
+              <div class="value">Evidence by default</div>
+              <div class="label">Immutable logs, policy versions, and human‑readable decisions for audit and oversight.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="heroCard reveal">
+          <div class="heroCardHeader">
+            <span class="tag">Prunex Gateway</span>
+            <span class="mini">observe → enforce</span>
+          </div>
+
+          <div class="diagram" aria-label="Architecture diagram">
+            <div class="flow">
+              <div class="node">
+                <strong>Internal apps</strong>
+                <span>copilots, workflows</span>
+              </div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="node gate">
+                <strong>Prunex</strong>
+                <span>policy + evidence</span>
+              </div>
+              <div class="arrow" aria-hidden="true">→</div>
+              <div class="node">
+                <strong>Agents & tools</strong>
+                <span>LLMs, RAG, APIs</span>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet"><span class="dot"></span><div><b>Multi‑format inspection</b> — text, tables/CSV, files, and code.</div></div>
+              <div class="bullet"><span class="dot"></span><div><b>Deterministic controls + AI models</b> — catch semantic risk and policy violations.</div></div>
+              <div class="bullet"><span class="dot"></span><div><b>Audit exports</b> — evidence mapped to regulatory and in‑house policies.</div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="pill"><span style="font-family:var(--mono);">PII/PHI</span> protection</span>
+            <span class="pill"><span style="font-family:var(--mono);">Ethics</span> & discrimination detection</span>
+            <span class="pill"><span style="font-family:var(--mono);">Agent‑to‑agent</span> controls</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="problem">
+      <div class="container">
+        <div class="sectionTitle">
+          <div>
+            <h2 class="reveal">The problem</h2>
+            <p class="sub reveal">Enterprises are deploying LLMs and AI agents fast — but governance, compliance, and auditability haven’t caught up.</p>
+          </div>
+          <div class="pill reveal"><span style="font-family:var(--mono);">Regulated environments</span> need proof</div>
+        </div>
+
+        <div class="grid3">
+          <div class="card reveal">
+            <h3>Sensitive data moves across tools</h3>
+            <p>AI agents pull from internal systems, documents, and knowledge bases. Without controls, data can leak through prompts, tool calls, and responses.</p>
+          </div>
+          <div class="card reveal">
+            <h3>“Best‑effort” guardrails don’t satisfy audits</h3>
+            <p>Policies on paper, manual reviews, and prompt guidelines aren’t enforceable at runtime — and don’t produce audit‑grade evidence.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Compliance teams slow or block adoption</h3>
+            <p>Without traceability and oversight, production rollouts stall — especially in healthcare, insurance, legal, and critical infrastructure.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solution">
+      <div class="container">
+        <div class="sectionTitle">
+          <div>
+            <h2 class="reveal">The solution</h2>
+            <p class="sub reveal">Prunex provides a runtime control plane for AI systems — enforce policies, explain decisions, and export compliance evidence.</p>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="card reveal" style="background: rgba(255,255,255,.07);">
+            <h3>Prunex is an AI Policy Governance Gateway</h3>
+            <p>It sits between your apps, internal agents, external tools, and model providers. Every interaction is evaluated against explicit, versioned policies — with deterministic enforcement and AI‑based semantic checks.</p>
+
+            <div class="steps">
+              <div class="step">
+                <div class="badge">1</div>
+                <div>
+                  <h4>Observe‑only rollout</h4>
+                  <p>Start safely. Measure risk, collect evidence, and tune policies without blocking production traffic.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="badge">2</div>
+                <div>
+                  <h4>Enforce in real time</h4>
+                  <p>Allow, block, or redact content across text, tables, files, and code — including agent‑to‑agent flows.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="badge">3</div>
+                <div>
+                  <h4>Prove compliance</h4>
+                  <p>Immutable logs with policy versions and human‑readable explanations. Export auditor‑ready evidence packages.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="list">
+            <div class="item reveal">
+              <div class="top"><b>Enforce regulatory + in‑house policies</b><span>GDPR / EU AI Act readiness</span></div>
+              <p>Map controls to standards and customer‑specific rules (data handling, ethics, acceptable use, industry constraints).</p>
+            </div>
+            <div class="item reveal">
+              <div class="top"><b>Ethical AI enablement</b><span>custom ethics frameworks</span></div>
+              <p>Detect discriminatory or unethical content and conversations using policy‑aligned AI models and configurable thresholds.</p>
+            </div>
+            <div class="item reveal">
+              <div class="top"><b>Security & traceability</b><span>audit‑grade logs</span></div>
+              <p>Record who/what/when/why for each decision, including what was blocked or redacted and which policy version ran.</p>
+            </div>
+            <div class="item reveal">
+              <div class="top"><b>Designed for enterprise rollout</b><span>integrates into stacks</span></div>
+              <p>Works as an API layer and can integrate with identity, logging/SIEM, and existing governance workflows.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="sectionTitle">
+          <div>
+            <h2 class="reveal">How it works</h2>
+            <p class="sub reveal">Deterministic rules provide reproducibility; AI models catch semantic risk and ethics violations. Together, they enable enforceable governance.</p>
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div class="card reveal">
+            <h3>1) Policy engine</h3>
+            <p>Explicit, versioned rules for data handling, access, and acceptable use — scoped by environment and use case.</p>
+          </div>
+          <div class="card reveal">
+            <h3>2) Multi‑format inspection</h3>
+            <p>Inspect prompts, responses, tool calls, and payloads across text, tables/CSV, files, and code.</p>
+          </div>
+          <div class="card reveal">
+            <h3>3) Evidence layer</h3>
+            <p>Immutable logs with decision traces and human‑readable explanations. Export structured artifacts for audits.</p>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi reveal">
+            <div class="value">Deterministic enforcement</div>
+            <div class="label">Reproducible outcomes auditors can trust — plus a safe observe‑only rollout path.</div>
+          </div>
+          <div class="kpi reveal">
+            <div class="value">AI‑based semantic detection</div>
+            <div class="label">Catch paraphrased leakage, unethical/discriminatory content, and policy violations that rules alone miss.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usecases">
+      <div class="container">
+        <div class="sectionTitle">
+          <div>
+            <h2 class="reveal">Ideal pilot use cases</h2>
+            <p class="sub reveal">Start with one AI workflow, then expand across teams, agents, and environments.</p>
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div class="card reveal">
+            <h3>Healthcare & HealthTech</h3>
+            <p>Protect PHI and sensitive documents across copilots, clinical workflows, and knowledge assistants — with audit‑ready evidence.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Insurance & FinTech</h3>
+            <p>Prevent leakage of customer data, pricing logic, and internal models — and enforce fairness/ethics policies in agent workflows.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Legal & Professional Services</h3>
+            <p>Keep privileged material and contract data protected while enabling assistants for research, drafting, and knowledge retrieval.</p>
+          </div>
+        </div>
+
+        <div class="card reveal" style="margin-top:14px;">
+          <h3>Common pilot objective</h3>
+          <p>
+            Move from AI experimentation to production by adding enforceable controls: observe risk first, then enforce policies,
+            and export evidence that security and compliance teams can approve.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <div class="container">
+        <div class="sectionTitle">
+          <div>
+            <h2 class="reveal">Team</h2>
+            <p class="sub reveal">A compact founding team combining AI engineering, product delivery, and go‑to‑market execution.</p>
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div class="card reveal">
+            <h3>Majed Ali</h3>
+            <p><b>Co‑Founder & CTO</b><br/>AI + data engineering. Builds secure foundations, integrations, and scalable deployments.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Nashib ul Khamash</h3>
+            <p><b>Co‑Founder & CEO</b><br/>AI product development and delivery. Drives product, customer discovery, and enterprise execution.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Anial Shabbir</h3>
+            <p><b>Co‑Founder (GTM)</b><br/>Product marketing and workflow automation. Focused on positioning, adoption, and growth.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="ctaBlock reveal">
+          <div>
+            <h3>Want to run a governed AI pilot?</h3>
+            <p>We’ll help you start in <b>observe‑only</b> mode, tune policies, and graduate to enforcement with audit‑ready evidence.</p>
+            <p class="fineprint" style="margin-top:10px;">Share a few details and we’ll get back within 48 hours.</p>
+          </div>
+
+          <form id="contactForm">
+            <div class="row">
+              <input name="name" placeholder="Name" required />
+              <input name="email" placeholder="Work email" type="email" required />
+            </div>
+            <input name="company" placeholder="Company" />
+            <textarea name="message" placeholder="What AI workflow or agent are you deploying? What data risks are you concerned about?"></textarea>
+            <button class="btn primary" type="submit">Send</button>
+            <div class="fineprint" id="formNote"></div>
+          </form>
+        </div>
+
+        <footer>
+          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
+            <div>© <span id="year"></span> Prunex. All rights reserved.</div>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <a href="#top" class="pill">Back to top</a>
+              <span class="pill"><span style="font-family:var(--mono);">prunex.ai</span></span>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Smooth anchor scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        const el = document.querySelector(href);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // close mobile nav on click
+        document.getElementById('mobileNav')?.classList.remove('show');
+      });
+    });
+
+    // Reveal on scroll
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) {
+      const io = new IntersectionObserver((entries) => {
+        for (const ent of entries) {
+          if (ent.isIntersecting) ent.target.classList.add('show');
+        }
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('show'));
+    }
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    menuBtn?.addEventListener('click', () => mobileNav?.classList.toggle('show'));
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Contact form (client-side only). Replace with your backend or form service.
+    const form = document.getElementById('contactForm');
+    const note = document.getElementById('formNote');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // Demo behavior: copy a message to clipboard so you can paste into an email.
+      const message = `New Prunex inquiry\n\nName: ${data.name || ''}\nEmail: ${data.email || ''}\nCompany: ${data.company || ''}\n\nMessage:\n${data.message || ''}`;
+      navigator.clipboard?.writeText(message).then(() => {
+        note.textContent = 'Copied your message to clipboard. Paste it into an email to: hello@prunex.ai (or connect this form to your backend).';
+      }).catch(() => {
+        note.textContent = 'Thanks! Please email us at hello@prunex.ai (replace with your preferred address).';
+      });
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
