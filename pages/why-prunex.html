@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Why choose Prunex for AI governance - policy-first architecture, responsible AI, enterprise trust, cross-system governance, and compliance readiness.">
+  <title>Why Prunex - Prunex</title>
+  <meta property="og:title" content="Why Prunex">
+  <meta property="og:description" content="Discover what makes Prunex the governance platform enterprises trust for AI oversight, compliance, and auditability.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../resources/css/styles.css">
+  <style>
+    /* Differentiator grid */
+    .diff-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .diff-block {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      transition: background var(--transition);
+    }
+
+    .diff-block:nth-child(3n) {
+      border-right: none;
+    }
+
+    .diff-block:nth-child(n+4) {
+      border-bottom: none;
+    }
+
+    .diff-block:hover {
+      background: var(--gray-50);
+    }
+
+    .diff-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--green);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .diff-block:hover::before {
+      opacity: 1;
+    }
+
+    .diff-number {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .diff-block h3 {
+      font-size: 1.125rem;
+      margin-bottom: 10px;
+    }
+
+    .diff-block p {
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1024px) {
+      .diff-grid { grid-template-columns: repeat(2, 1fr); }
+      .diff-block:nth-child(3n) { border-right: 1px solid var(--border); }
+      .diff-block:nth-child(2n) { border-right: none; }
+      .diff-block:nth-child(n+4) { border-bottom: 1px solid var(--border); }
+      .diff-block:nth-child(n+5) { border-bottom: none; }
+    }
+
+    @media (max-width: 768px) {
+      .diff-grid { grid-template-columns: 1fr; }
+      .diff-block { border-right: none !important; border-bottom: 1px solid var(--border) !important; }
+      .diff-block:last-child { border-bottom: none !important; }
+    }
+
+    /* Comparison table */
+    .comparison-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .comparison-table thead th {
+      padding: 20px 24px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: var(--gray-50);
+      color: var(--text-muted);
+    }
+
+    .comparison-table thead th:last-child {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .comparison-table tbody td {
+      padding: 18px 24px;
+      font-size: 0.9375rem;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .comparison-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table tbody td:first-child {
+      font-weight: 600;
+      color: var(--text-primary);
+      width: 22%;
+    }
+
+    .comparison-table tbody td:last-child {
+      color: var(--text-primary);
+      background: rgba(26, 58, 42, 0.03);
+    }
+
+    .comparison-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .comparison-indicator::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .indicator-limited::before { background: var(--gray-400); }
+    .indicator-strong::before { background: var(--green); }
+
+    @media (max-width: 768px) {
+      .comparison-table { font-size: 0.8125rem; }
+      .comparison-table thead th,
+      .comparison-table tbody td { padding: 14px 16px; }
+    }
+
+    /* Why now blocks */
+    .why-now-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .why-now-block {
+      padding: 40px 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .why-now-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--green);
+    }
+
+    .why-now-block h3 {
+      color: var(--white);
+      font-size: 1.125rem;
+      margin-bottom: 12px;
+    }
+
+    .why-now-block p {
+      color: var(--gray-400);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .why-now-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="../index.html" class="logo" aria-label="Prunex Home">
+          <div class="logo-mark" aria-hidden="true"><img src="../resources/images/logo.png" alt="Prunex"></div>
+          <span>Prunex</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="offerings.html">Offerings</a>
+          <a href="why-prunex.html">Why Prunex</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="header-actions">
+          <a href="contact.html" class="btn btn-primary">Contact Us</a>
+          <button class="menu-toggle" aria-label="Toggle menu"><span></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-nav">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="offerings.html">Offerings</a>
+      <a href="why-prunex.html">Why Prunex</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1. Intro -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-centered reveal">
+          <span class="eyebrow">Why Prunex</span>
+          <h1>Why Prunex</h1>
+          <p>Governing AI at enterprise scale requires more than fragmented controls, vendor-specific tools, or manual processes. It requires purpose-built governance infrastructure that works across systems, teams, and regulatory environments.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 2. Differentiators -->
+    <section class="section section-border-top">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">What Sets Us Apart</span>
+          <h2>Six reasons enterprises choose Prunex</h2>
+        </div>
+
+        <div class="diff-grid reveal">
+          <div class="diff-block">
+            <div class="diff-number">01</div>
+            <h3>Policy-first architecture</h3>
+            <p>Governance starts with structured, versioned policies. Prunex organises controls around your specific policies, standards, and risk appetite rather than relying on generic rule sets.</p>
+          </div>
+
+          <div class="diff-block">
+            <div class="diff-number">02</div>
+            <h3>Responsible AI built in</h3>
+            <p>Ethical oversight is embedded into the governance framework. Bias detection, fairness monitoring, and transparency reporting operate as standard controls, not as separate initiatives.</p>
+          </div>
+
+          <div class="diff-block">
+            <div class="diff-number">03</div>
+            <h3>Enterprise trust and control</h3>
+            <p>Designed for organisations that need verifiable proof of governance. Every enforcement action, every decision, every exception is recorded with full context and traceability.</p>
+          </div>
+
+          <div class="diff-block">
+            <div class="diff-number">04</div>
+            <h3>Cross-system governance</h3>
+            <p>Prunex applies governance consistently across AI models, agents, workflows, and tools regardless of vendor or framework. One governance layer for your entire AI environment.</p>
+          </div>
+
+          <div class="diff-block">
+            <div class="diff-number">05</div>
+            <h3>Compliance and auditability</h3>
+            <p>Structured, audit-ready evidence is generated automatically. Compliance teams gain visibility without manual evidence collection or retrospective documentation assembly.</p>
+          </div>
+
+          <div class="diff-block">
+            <div class="diff-number">06</div>
+            <h3>Minimal operational friction</h3>
+            <p>Prunex integrates into existing enterprise architectures and supports an observe-first rollout model. Start with visibility before activating enforcement.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 3. Comparison -->
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Comparison</span>
+          <h2>How Prunex compares to common approaches</h2>
+          <p>Most organisations rely on approaches that were not designed for cross-system AI governance.</p>
+        </div>
+
+        <div class="reveal" style="overflow-x: auto;">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th>Vendor-Native Controls</th>
+                <th>Manual Processes</th>
+                <th>Point Security Tools</th>
+                <th>Prunex</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cross-system coverage</td>
+                <td><span class="comparison-indicator indicator-limited">Limited to one vendor</span></td>
+                <td><span class="comparison-indicator indicator-limited">Inconsistent across teams</span></td>
+                <td><span class="comparison-indicator indicator-limited">Narrow scope</span></td>
+                <td><span class="comparison-indicator indicator-strong">Unified across all AI systems</span></td>
+              </tr>
+              <tr>
+                <td>Policy enforcement</td>
+                <td><span class="comparison-indicator indicator-limited">Platform-specific rules</span></td>
+                <td><span class="comparison-indicator indicator-limited">Guidelines only</span></td>
+                <td><span class="comparison-indicator indicator-limited">Security-focused rules</span></td>
+                <td><span class="comparison-indicator indicator-strong">Structured, versioned policies</span></td>
+              </tr>
+              <tr>
+                <td>Audit evidence</td>
+                <td><span class="comparison-indicator indicator-limited">Basic logging</span></td>
+                <td><span class="comparison-indicator indicator-limited">Assembled manually</span></td>
+                <td><span class="comparison-indicator indicator-limited">Security logs only</span></td>
+                <td><span class="comparison-indicator indicator-strong">Automatic, structured evidence</span></td>
+              </tr>
+              <tr>
+                <td>Responsible AI</td>
+                <td><span class="comparison-indicator indicator-limited">Varies by vendor</span></td>
+                <td><span class="comparison-indicator indicator-limited">Periodic reviews</span></td>
+                <td><span class="comparison-indicator indicator-limited">Not addressed</span></td>
+                <td><span class="comparison-indicator indicator-strong">Embedded in operations</span></td>
+              </tr>
+              <tr>
+                <td>Enterprise integration</td>
+                <td><span class="comparison-indicator indicator-limited">Single ecosystem</span></td>
+                <td><span class="comparison-indicator indicator-limited">People-dependent</span></td>
+                <td><span class="comparison-indicator indicator-limited">Limited connectors</span></td>
+                <td><span class="comparison-indicator indicator-strong">Works with existing infrastructure</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 4. Why Now -->
+    <section class="section section-border-top">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Why Now</span>
+          <h2>The window for proactive governance is narrowing</h2>
+          <p>Organisations that build governance infrastructure now will be better positioned for what comes next.</p>
+        </div>
+
+        <div class="why-now-grid reveal">
+          <div class="why-now-block">
+            <h3>AI adoption is accelerating</h3>
+            <p>Enterprises are moving AI from experimentation to production across every function. Each new deployment increases the surface area that governance must cover. Retrofitting controls later is significantly harder and more expensive.</p>
+          </div>
+
+          <div class="why-now-block">
+            <h3>Compliance expectations are rising</h3>
+            <p>The EU AI Act, sector-specific regulations, and internal audit requirements are creating concrete obligations around AI oversight. Organisations need systems that produce evidence, not just commitments.</p>
+          </div>
+
+          <div class="why-now-block">
+            <h3>Trust demands accountability</h3>
+            <p>Boards, customers, regulators, and the public expect organisations to demonstrate responsible AI use. Trust is earned through verifiable control, transparent processes, and consistent accountability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 5. Final CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Build AI governance on stronger foundations</h2>
+          <p>Contact our team to discuss how Prunex can support your organisation's governance requirements.</p>
+          <a href="contact.html" class="btn btn-primary btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-mark" aria-hidden="true"><img src="../resources/images/logo.png" alt="Prunex"></div>
+            <span>Prunex</span>
+          </div>
+          <p>Enterprise AI governance through policy control, compliance support, responsible AI oversight, and auditability.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="offerings.html">Offerings</a>
+          <a href="why-prunex.html">Why Prunex</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="cookies.html">Cookie Policy</a>
+          <a href="cookies.html#settings">Cookie Settings</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:info@prunex.ai">info@prunex.ai</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Prunex. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cookie-banner" role="dialog" aria-label="Cookie consent">
+    <div class="cookie-banner-inner">
+      <p>We use cookies to improve your experience. By continuing to visit this site you agree to our use of cookies. <a href="cookies.html">Learn more</a>.</p>
+      <div class="cookie-banner-actions">
+        <button class="btn btn-sm" id="cookie-decline">Decline</button>
+        <button class="btn btn-primary btn-sm" id="cookie-accept">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../resources/js/main.js"></script>
+</body>
+</html>

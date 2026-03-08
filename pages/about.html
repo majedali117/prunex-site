@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn about Prunex - our mission to help enterprises govern AI with confidence through policy control, compliance support, and responsible AI oversight.">
+  <title>About Us - Prunex</title>
+  <meta property="og:title" content="About Us - Prunex">
+  <meta property="og:description" content="Prunex helps enterprises govern AI with confidence through policy control, compliance support, and auditability.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../resources/css/styles.css">
+  <style>
+    /* Mission/Vision split */
+    .mv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .mv-block {
+      padding: 60px 48px;
+      position: relative;
+    }
+
+    .mv-block:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .mv-block .eyebrow {
+      margin-bottom: 20px;
+    }
+
+    .mv-block h2 {
+      font-size: 1.75rem;
+      margin-bottom: 16px;
+    }
+
+    .mv-block p {
+      font-size: 1rem;
+      line-height: 1.8;
+      max-width: 420px;
+    }
+
+    .mv-block .accent-line {
+      width: 40px;
+      height: 3px;
+      background: var(--green);
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .mv-grid { grid-template-columns: 1fr; }
+      .mv-block { padding: 40px 0; }
+      .mv-block:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    /* Problem blocks */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .problem-block {
+      padding: 40px 32px;
+      position: relative;
+      border-right: 1px solid var(--border);
+    }
+
+    .problem-block:last-child {
+      border-right: none;
+    }
+
+    .problem-number {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--gray-200);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -0.03em;
+    }
+
+    .problem-block h4 {
+      margin-bottom: 10px;
+    }
+
+    .problem-block p {
+      font-size: 0.9375rem;
+    }
+
+    @media (max-width: 768px) {
+      .problem-grid { grid-template-columns: 1fr; }
+      .problem-block { border-right: none; border-bottom: 1px solid var(--border); }
+      .problem-block:last-child { border-bottom: none; }
+    }
+
+    /* Leadership section */
+    .leadership-card {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 48px;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .leadership-visual {
+      background: var(--gray-50);
+      height: 100%;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+      padding: 40px;
+    }
+
+    .leadership-visual-inner {
+      width: 120px;
+      height: 120px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .leadership-visual-inner::before {
+      content: '';
+      width: 80px;
+      height: 80px;
+      border: 1px solid var(--gray-300);
+      border-radius: 50%;
+    }
+
+    .leadership-content {
+      padding: 40px 40px 40px 0;
+    }
+
+    .leadership-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    .leadership-content p {
+      margin-bottom: 16px;
+      font-size: 0.9375rem;
+      line-height: 1.8;
+    }
+
+    .leadership-placeholder {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .leadership-card { grid-template-columns: 1fr; }
+      .leadership-visual { min-height: 200px; border-right: none; border-bottom: 1px solid var(--border); }
+      .leadership-content { padding: 32px 24px; }
+    }
+
+    /* Values */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .value-block {
+      padding: 40px 24px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      position: relative;
+      transition: background var(--transition);
+    }
+
+    .value-block:last-child {
+      border-right: none;
+    }
+
+    .value-block:hover {
+      background: var(--gray-50);
+    }
+
+    .value-block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--green);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .value-block:hover::before {
+      opacity: 1;
+    }
+
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      font-size: 1.125rem;
+      transition: border-color var(--transition);
+    }
+
+    .value-block:hover .value-icon {
+      border-color: var(--green);
+    }
+
+    .value-block h4 {
+      font-size: 0.9375rem;
+      margin-bottom: 8px;
+    }
+
+    .value-block p {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1024px) {
+      .values-grid { grid-template-columns: repeat(3, 1fr); }
+      .value-block:nth-child(3) { border-right: none; }
+    }
+
+    @media (max-width: 768px) {
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .value-block { border-right: none; border-bottom: 1px solid var(--border); }
+      .value-block:nth-child(even) { border-left: 1px solid var(--border); }
+      .value-block:last-child { border-bottom: none; }
+    }
+
+    /* Intro quote style */
+    .intro-statement {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-primary);
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+
+    .intro-statement strong {
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="../index.html" class="logo" aria-label="Prunex Home">
+          <div class="logo-mark" aria-hidden="true"><img src="../resources/images/logo.png" alt="Prunex"></div>
+          <span>Prunex</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="offerings.html">Offerings</a>
+          <a href="why-prunex.html">Why Prunex</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="header-actions">
+          <a href="contact.html" class="btn btn-primary">Contact Us</a>
+          <button class="menu-toggle" aria-label="Toggle menu"><span></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-nav">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="offerings.html">Offerings</a>
+      <a href="why-prunex.html">Why Prunex</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1. Intro -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-centered reveal">
+          <span class="eyebrow">About Prunex</span>
+          <h1>About Prunex</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm section-border-top">
+      <div class="container">
+        <div class="reveal" style="padding: 40px 0;">
+          <p class="intro-statement">
+            Prunex exists to help organisations adopt AI with <strong>stronger control</strong>,
+            <strong>clearer accountability</strong>, and <strong>greater trust</strong>.
+            We build governance infrastructure that makes AI safer to deploy, simpler to oversee,
+            and easier to prove compliant.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 2 & 3. Mission / Vision Split -->
+    <section class="section-sm section-border-top">
+      <div class="container">
+        <div class="mv-grid reveal">
+          <div class="mv-block">
+            <span class="eyebrow">Our Mission</span>
+            <div class="accent-line"></div>
+            <h2>Making AI governance operational</h2>
+            <p>
+              We help enterprises govern AI with confidence by providing structured policy control,
+              continuous compliance support, and responsible AI oversight. Our mission is to turn
+              governance from a set of principles into an operational discipline that works at
+              enterprise scale.
+            </p>
+          </div>
+
+          <div class="mv-block">
+            <span class="eyebrow">Our Vision</span>
+            <div class="accent-line"></div>
+            <h2>AI at scale, without compromise</h2>
+            <p>
+              We envision a future where organisations use AI at scale without sacrificing policy,
+              trust, compliance, or responsibility. Where governance is not a barrier to innovation
+              but the foundation that makes it sustainable, accountable, and worthy of confidence.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 4. Why We Exist -->
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Why We Exist</span>
+          <h2>The problem we are solving</h2>
+          <p>The AI adoption curve is outpacing the governance infrastructure needed to support it.</p>
+        </div>
+
+        <div class="problem-grid reveal">
+          <div class="problem-block">
+            <div class="problem-number">01</div>
+            <h4>AI adoption is accelerating</h4>
+            <p>
+              Enterprises are deploying AI models, agents, and workflows across every function.
+              The pace is increasing, but governance structures remain static and manual.
+            </p>
+          </div>
+
+          <div class="problem-block">
+            <div class="problem-number">02</div>
+            <h4>Governance is fragmented</h4>
+            <p>
+              Policies sit in documents. Oversight is team-by-team. There is no single layer ensuring
+              consistent control across AI systems, data flows, and decision points.
+            </p>
+          </div>
+
+          <div class="problem-block">
+            <div class="problem-number">03</div>
+            <h4>Enterprises need control</h4>
+            <p>
+              Regulators expect proof. Boards expect accountability. Customers expect transparency.
+              Organisations need infrastructure that delivers all three, continuously.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 5. Leadership -->
+    <section class="section section-border-top">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Leadership</span>
+          <h2>Built by people who understand the problem</h2>
+        </div>
+
+        <div class="leadership-card reveal">
+          <div class="leadership-visual">
+            <div class="leadership-visual-inner"></div>
+          </div>
+          <div class="leadership-content">
+            <h3>Founded on real-world experience</h3>
+            <p>
+              Prunex was founded by practitioners who have worked at the intersection of enterprise
+              technology, AI systems, and regulatory compliance. We understand what it takes to build
+              governance that operates in production, not just on paper.
+            </p>
+            <p>
+              Our leadership team brings deep experience across enterprise software, data governance,
+              policy frameworks, and AI engineering. We have built and deployed systems at scale,
+              and we know where governance breaks down when it is not designed into the architecture.
+            </p>
+            <div class="leadership-placeholder">
+              Leadership profiles coming soon
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 6. Values -->
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Our Values</span>
+          <h2>Principles that guide everything we build</h2>
+        </div>
+
+        <div class="values-grid reveal">
+          <div class="value-block">
+            <div class="value-icon">&#9632;</div>
+            <h4>Trust</h4>
+            <p>Governance only works if stakeholders trust it. We build for transparency, traceability, and verifiability.</p>
+          </div>
+
+          <div class="value-block">
+            <div class="value-icon">&#9678;</div>
+            <h4>Clarity</h4>
+            <p>Complex systems require clear communication. We make governance understandable for every stakeholder.</p>
+          </div>
+
+          <div class="value-block">
+            <div class="value-icon">&#9671;</div>
+            <h4>Responsibility</h4>
+            <p>Responsible AI is not optional. We embed ethical oversight and fairness into the operational layer.</p>
+          </div>
+
+          <div class="value-block">
+            <div class="value-icon">&#9635;</div>
+            <h4>Control</h4>
+            <p>Enterprises need enforceable control, not suggestions. We build systems that apply policy, not just document it.</p>
+          </div>
+
+          <div class="value-block">
+            <div class="value-icon">&#9670;</div>
+            <h4>Pragmatism</h4>
+            <p>We design for real enterprise environments. Our solutions work within existing architectures and timelines.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 7. Final CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Let's talk about trusted AI governance</h2>
+          <p>We would welcome the opportunity to understand your governance challenges and share how Prunex can help.</p>
+          <a href="contact.html" class="btn btn-primary btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-mark" aria-hidden="true"><img src="../resources/images/logo.png" alt="Prunex"></div>
+            <span>Prunex</span>
+          </div>
+          <p>Enterprise AI governance through policy control, compliance support, responsible AI oversight, and auditability.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="offerings.html">Offerings</a>
+          <a href="why-prunex.html">Why Prunex</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="cookies.html">Cookie Policy</a>
+          <a href="cookies.html#settings">Cookie Settings</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:info@prunex.ai">info@prunex.ai</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Prunex. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cookie-banner" role="dialog" aria-label="Cookie consent">
+    <div class="cookie-banner-inner">
+      <p>We use cookies to improve your experience. By continuing to visit this site you agree to our use of cookies. <a href="cookies.html">Learn more</a>.</p>
+      <div class="cookie-banner-actions">
+        <button class="btn btn-sm" id="cookie-decline">Decline</button>
+        <button class="btn btn-primary btn-sm" id="cookie-accept">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../resources/js/main.js"></script>
+</body>
+</html>
