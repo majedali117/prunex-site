@@ -272,7 +272,7 @@
         </nav>
 
         <div class="header-actions">
-          <a href="pages/contact.html" class="btn btn-primary">Contact Us</a>
+          <a href="pages/contact.html" class="btn btn-primary">Request a Demo</a>
           <button class="menu-toggle" aria-label="Toggle menu">
             <span></span>
           </button>
@@ -299,8 +299,8 @@
           <h1>Govern AI with Confidence</h1>
           <p>Prunex helps enterprises enforce policy, support compliance, and govern responsible AI across models, agents, and workflows.</p>
           <div class="hero-actions">
-            <a href="pages/contact.html" class="btn btn-primary btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
-            <a href="pages/offerings.html" class="btn btn-lg">Learn More <span class="arrow">&rarr;</span></a>
+            <a href="pages/contact.html" class="btn btn-primary btn-lg">Request a Demo <span class="arrow">&rarr;</span></a>
+            <a href="pages/contact.html" class="btn btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
           </div>
         </div>
       </div>
@@ -329,6 +329,26 @@
       </div>
     </section>
 
+    <!-- Trust Stats Bar -->
+    <section class="section-sm section-border-top" style="padding: 32px 0;">
+      <div class="container">
+        <div class="grid grid-3 reveal" style="gap: 24px; text-align: center;">
+          <div style="padding: 20px;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em;">68%</div>
+            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;">of enterprises report AI data leakage incidents</div>
+          </div>
+          <div style="padding: 20px; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em;">$5.1M</div>
+            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;">average cost of a data breach in 2025</div>
+          </div>
+          <div style="padding: 20px;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em;">77%</div>
+            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;">of companies reported AI-related security incidents</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
     <!-- 2. Core Values -->
     <section class="section section-border-top">
@@ -343,18 +363,21 @@
             <div class="card-icon" style="color: var(--green);">&#9632;</div>
             <h3>Policy Control</h3>
             <p>Define, version, and enforce AI usage policies consistently across your organisation's systems and teams.</p>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">Example: Define who can access which AI models, with what data, under what conditions.</p>
           </div>
 
           <div class="card reveal reveal-delay-2">
             <div class="card-icon" style="color: var(--green);">&#9678;</div>
             <h3>Compliance Readiness</h3>
             <p>Map governance controls to regulatory requirements and generate structured evidence for audits and reviews.</p>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">Example: Auto-generate audit trails aligned to EU AI Act, NIST AI RMF, or ISO 42001.</p>
           </div>
 
           <div class="card reveal reveal-delay-3">
             <div class="card-icon" style="color: var(--green);">&#9671;</div>
             <h3>Responsible AI</h3>
             <p>Embed fairness, transparency, and ethical oversight into AI operations as standard practice, not an afterthought.</p>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">Example: Detect and flag biased outputs, block sensitive data exposure, log every decision.</p>
           </div>
         </div>
       </div>
@@ -418,6 +441,50 @@
                   <div style="font-size: 0.875rem; color: var(--gray-500);">Uncontrolled AI outputs can cause real harm and public trust erosion.</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Real-World AI Governance Failures -->
+    <section class="section section-border-top">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Why This Is Urgent</span>
+          <h2>What happens without AI governance</h2>
+          <p>These are real incidents that impacted real enterprises. Each could have been prevented with proper AI policy enforcement.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card reveal reveal-delay-1" style="background: var(--black); padding: 32px;">
+            <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;">Case Study</div>
+            <h3 style="color: var(--white); margin-bottom: 12px;">Samsung Source Code Leak</h3>
+            <p style="color: var(--gray-400); margin-bottom: 16px;">Samsung employees pasted proprietary semiconductor source code and internal meeting recordings into ChatGPT. Confidential data entered a third-party AI system with no retrieval mechanism.</p>
+            <div style="padding: 12px 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
+              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px;">How Prunex helps prevent this</div>
+              <div style="font-size: 0.8125rem; color: var(--gray-400);">Policy-based controls that detect and block sensitive data before it reaches external AI systems. Every interaction inspected, evaluated, and logged.</div>
+            </div>
+          </div>
+
+          <div class="card reveal reveal-delay-2" style="background: var(--black); padding: 32px;">
+            <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;">Case Study</div>
+            <h3 style="color: var(--white); margin-bottom: 12px;">ChatGPT Payment Data Exposure</h3>
+            <p style="color: var(--gray-400); margin-bottom: 16px;">A bug in ChatGPT's infrastructure exposed chat histories and payment information of 1.2% of Plus subscribers, including names, email addresses, and partial credit card numbers.</p>
+            <div style="padding: 12px 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
+              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px;">How Prunex helps prevent this</div>
+              <div style="font-size: 0.8125rem; color: var(--gray-400);">Continuous monitoring of AI system outputs for PII exposure. Automated redaction and audit logging of every data flow.</div>
+            </div>
+          </div>
+
+          <div class="card reveal reveal-delay-3" style="background: var(--black); padding: 32px;">
+            <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;">Industry Data</div>
+            <h3 style="color: var(--white); margin-bottom: 12px;">Shadow AI Is the Norm</h3>
+            <p style="color: var(--gray-400); margin-bottom: 16px;">68% of enterprises report AI data leakage from employees sharing sensitive information with AI tools. Only 23% have comprehensive security policies addressing these risks.</p>
+            <div style="padding: 12px 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
+              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px;">How Prunex helps prevent this</div>
+              <div style="font-size: 0.8125rem; color: var(--gray-400);">Enterprise-wide governance layer that enforces policy across every AI interaction, regardless of the tool or model employees use.</div>
             </div>
           </div>
         </div>
@@ -499,7 +566,7 @@
           </div>
 
           <div style="text-align: center; margin-top: 24px; font-size: 0.8125rem; color: var(--text-muted);">
-            Policy enforcement, compliance monitoring, and audit evidence at every interaction point.
+            Works with Azure OpenAI, AWS Bedrock, internal LLMs, custom agents, and any AI system in your environment.
           </div>
         </div>
       </div>
@@ -534,6 +601,37 @@
           <div class="audience-card reveal reveal-delay-4">
             <h3>Digital Transformation Leaders</h3>
             <p>Integrate AI governance into enterprise transformation programmes from the start, not after the fact.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Compliance Frameworks -->
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Compliance Ready</span>
+          <h2>Built for the frameworks that matter</h2>
+          <p>Prunex is designed to support governance requirements across major regulatory and compliance frameworks.</p>
+        </div>
+
+        <div class="grid grid-4 reveal">
+          <div class="card" style="text-align: center; padding: 32px 24px;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">EU AI Act</div>
+            <p style="font-size: 0.8125rem;">Risk classification, transparency obligations, and documentation requirements for AI systems deployed in or serving the EU.</p>
+          </div>
+          <div class="card" style="text-align: center; padding: 32px 24px;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">NIST AI RMF</div>
+            <p style="font-size: 0.8125rem;">Structured approach to AI risk management aligned with the NIST Artificial Intelligence Risk Management Framework.</p>
+          </div>
+          <div class="card" style="text-align: center; padding: 32px 24px;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">ISO 42001</div>
+            <p style="font-size: 0.8125rem;">Support for organisations pursuing AI management system certification under the ISO/IEC 42001 standard.</p>
+          </div>
+          <div class="card" style="text-align: center; padding: 32px 24px;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">SOC 2</div>
+            <p style="font-size: 0.8125rem;">Audit-ready evidence and controls documentation to support SOC 2 trust service criteria for AI operations.</p>
           </div>
         </div>
       </div>
@@ -588,8 +686,11 @@
       <div class="container">
         <div class="cta-block reveal">
           <h2>Ready to govern AI with confidence?</h2>
-          <p>Speak with our team to learn how Prunex can support your organisation's AI governance requirements.</p>
-          <a href="pages/contact.html" class="btn btn-primary btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
+          <p>See how Prunex can support your organisation's AI governance requirements with a personalised demo.</p>
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="pages/contact.html" class="btn btn-primary btn-lg">Request a Demo <span class="arrow">&rarr;</span></a>
+            <a href="pages/contact.html" class="btn btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
+          </div>
         </div>
       </div>
     </section>
@@ -626,6 +727,7 @@
         <div class="footer-col">
           <h4>Contact</h4>
           <a href="mailto:info@prunex.ai">info@prunex.ai</a>
+          <a href="https://www.linkedin.com/company/prunex" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
       </div>
 
