@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Insights on AI governance, data leakage incidents, and enterprise AI security from the Prunex team.">
+  <title>Blog - Prunex</title>
+  <meta property="og:title" content="Blog - Prunex">
+  <meta property="og:description" content="Insights on AI governance, data leakage, and enterprise AI security.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../resources/css/styles.css">
+  <style>
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .blog-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-card:hover {
+      border-color: var(--gray-300);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .blog-card-image {
+      width: 100%;
+      height: 200px;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blog-card-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--green);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .blog-card-body {
+      padding: 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-card-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .blog-card-body h3 {
+      font-size: 1.125rem;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .blog-card-body p {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+
+    .blog-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 20px;
+      transition: gap var(--transition-fast);
+    }
+
+    .blog-card:hover .blog-card-link {
+      gap: 10px;
+    }
+
+    .blog-intro {
+      max-width: 700px;
+      margin: 0 auto 60px;
+      text-align: center;
+    }
+
+    .blog-intro p {
+      font-size: 1.0625rem;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 1024px) {
+      .blog-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-centered reveal">
+          <span class="eyebrow">Blog</span>
+          <h1>Insights & Analysis</h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Intro -->
+    <section class="section-sm section-border-top">
+      <div class="container">
+        <div class="blog-intro reveal">
+          <p>Real-world lessons from AI data leakage incidents, governance failures, and the growing case for structured oversight across enterprise AI systems.</p>
+        </div>
+
+        <!-- Blog Grid -->
+        <div class="blog-grid">
+
+          <!-- Blog 1 -->
+          <a href="blog/chatgpt-data-leak-2023.html" class="blog-card reveal reveal-delay-1">
+            <div class="blog-card-image">
+              <img src="../resources/images/blog/chatgpt-data-leak.png" alt="ChatGPT data leak illustration showing cracked shield and data nodes">
+              <div class="blog-card-label">Case Study</div>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-card-meta">
+                <span>March 2023</span>
+                <span>8 min read</span>
+              </div>
+              <h3>The ChatGPT Bug That Exposed User Payment Data</h3>
+              <p>A bug in an open-source library caused ChatGPT to leak chat histories and payment details of 1.2% of Plus subscribers. What happened, and what it means for AI platform security.</p>
+              <div class="blog-card-link">Read article <span>&rarr;</span></div>
+            </div>
+          </a>
+
+          <!-- Blog 2 -->
+          <a href="blog/samsung-chatgpt-data-leak.html" class="blog-card reveal reveal-delay-2">
+            <div class="blog-card-image">
+              <img src="../resources/images/blog/samsung-data-leak.png" alt="Samsung data leak illustration showing data flowing from person to AI system">
+              <div class="blog-card-label">Case Study</div>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-card-meta">
+                <span>April 2023</span>
+                <span>7 min read</span>
+              </div>
+              <h3>How Samsung Employees Leaked Source Code to ChatGPT</h3>
+              <p>Three separate incidents where Samsung engineers pasted proprietary code and internal meeting recordings into ChatGPT. A lesson in the human factor of AI data leakage.</p>
+              <div class="blog-card-link">Read article <span>&rarr;</span></div>
+            </div>
+          </a>
+
+          <!-- Blog 3 -->
+          <a href="blog/repeated-token-attack-chatgpt.html" class="blog-card reveal reveal-delay-3">
+            <div class="blog-card-image">
+              <img src="../resources/images/blog/token-attack.png" alt="Token attack illustration showing magnifying glass examining data extraction from neural network">
+              <div class="blog-card-label">Research</div>
+            </div>
+            <div class="blog-card-body">
+              <div class="blog-card-meta">
+                <span>December 2023</span>
+                <span>8 min read</span>
+              </div>
+              <h3>The $200 Attack That Extracted Training Data from ChatGPT</h3>
+              <p>Researchers from Google DeepMind discovered that repeating single words could coax ChatGPT into leaking memorised training data, including personal information and code.</p>
+              <div class="blog-card-link">Read article <span>&rarr;</span></div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Don't let your organisation be the next case study</h2>
+          <p>See how Prunex helps enterprises prevent AI data leakage through policy control, compliance support, and real-time oversight.</p>
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="contact.html" class="btn btn-primary btn-lg">Request a Demo <span class="arrow">&rarr;</span></a>
+            <a href="contact.html" class="btn btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-cookie-banner"></div>
+
+  <script src="../resources/js/components.js"></script>
+  <script src="../resources/js/main.js"></script>
+</body>
+</html>

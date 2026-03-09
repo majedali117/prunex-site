@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How Samsung employees inadvertently leaked proprietary source code and internal meeting recordings to ChatGPT in three separate incidents. Lessons for enterprise AI governance.">
+  <title>How Samsung Employees Leaked Source Code to ChatGPT - Prunex Blog</title>
+  <meta property="og:title" content="How Samsung Employees Leaked Source Code to ChatGPT">
+  <meta property="og:description" content="Three separate incidents where Samsung engineers shared confidential code and meeting recordings with ChatGPT.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../resources/css/styles.css">
+  <style>
+    .blog-article { max-width: 740px; margin: 0 auto; padding: 0 24px; }
+    .blog-article-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .blog-article-meta { display: flex; gap: 24px; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 24px; }
+    .blog-article-meta span { display: flex; align-items: center; gap: 6px; }
+    .blog-article-label { display: inline-block; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); background: var(--green); padding: 4px 10px; border-radius: var(--radius-sm); margin-bottom: 16px; }
+    .blog-article h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.2; margin-bottom: 16px; }
+    .blog-article-header p { font-size: 1.0625rem; line-height: 1.8; color: var(--text-secondary); }
+    .blog-article h2 { font-size: 1.5rem; margin-top: 48px; margin-bottom: 16px; }
+    .blog-article h3 { font-size: 1.125rem; margin-top: 32px; margin-bottom: 12px; }
+    .blog-article p { font-size: 1rem; line-height: 1.8; margin-bottom: 20px; }
+    .blog-article ul, .blog-article ol { margin-bottom: 20px; padding-left: 24px; }
+    .blog-article li { font-size: 1rem; line-height: 1.8; margin-bottom: 8px; color: var(--text-secondary); }
+    .blog-article ul li { list-style: disc; }
+    .blog-article ol li { list-style: decimal; }
+    .blog-callout { padding: 24px 28px; background: var(--gray-50); border-left: 3px solid var(--green); border-radius: var(--radius); margin: 32px 0; }
+    .blog-callout p { margin-bottom: 0; font-size: 0.9375rem; }
+    .blog-callout-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+    .blog-key-fact { padding: 24px 28px; background: var(--black); border-radius: var(--radius-lg); margin: 32px 0; }
+    .blog-key-fact h4 { color: var(--white); font-size: 0.875rem; margin-bottom: 12px; }
+    .blog-key-fact ul { padding-left: 20px; }
+    .blog-key-fact li { color: var(--gray-400); font-size: 0.875rem; margin-bottom: 6px; }
+    .blog-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; margin-top: 60px; border-top: 1px solid var(--border); }
+    .blog-nav a { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; transition: gap var(--transition-fast); }
+    .blog-nav a:hover { gap: 12px; }
+    .incident-block { padding: 28px; border: 1px solid var(--border); border-radius: var(--radius-lg); margin: 24px 0; }
+    .incident-block h3 { margin-top: 0; }
+    .incident-number { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    @media (max-width: 768px) { .blog-article-meta { flex-direction: column; gap: 8px; } }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <section class="hero" style="padding-bottom: 40px;">
+      <div class="blog-article">
+        <a href="../blog.html" style="font-size: 0.8125rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 32px;">&larr; Back to Blog</a>
+
+        <div class="blog-article-header reveal">
+          <div class="blog-article-label">Case Study</div>
+          <div class="blog-article-meta">
+            <span>April 2023</span>
+            <span>7 min read</span>
+            <span>Employee Data Leakage</span>
+          </div>
+          <h1>Samsung's Employee Data Leaks to ChatGPT</h1>
+          <p>In April 2023, Samsung employees inadvertently leaked confidential corporate information into ChatGPT in three separate incidents—sending proprietary semiconductor source code and internal meeting recordings to a third-party AI system with no way to retrieve or delete them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="blog-article reveal">
+
+        <div class="blog-key-fact">
+          <h4>Key Facts</h4>
+          <ul>
+            <li>Three separate data leakage incidents within weeks of allowing ChatGPT use</li>
+            <li>Proprietary semiconductor source code sent to ChatGPT for debugging</li>
+            <li>Internal meeting recording transcribed by ChatGPT</li>
+            <li>Data entered ChatGPT's training pipeline with no retrieval mechanism</li>
+            <li>Samsung subsequently restricted AI tool usage and limited prompts to 1024 bytes</li>
+          </ul>
+        </div>
+
+        <h2>Background</h2>
+        <p>In April 2023 multiple media outlets reported that Samsung Electronics employees inadvertently leaked confidential corporate information into ChatGPT. The Economist Korea and other sources described three separate incidents that occurred within weeks of the company permitting employees to use generative AI tools.</p>
+        <p>The incidents triggered widespread discussion about the risks of enterprise employees using public AI tools without proper governance controls.</p>
+
+        <h2>What Happened</h2>
+
+        <div class="incident-block">
+          <div class="incident-number">Incident 1</div>
+          <h3>Faulty source code pasted for debugging</h3>
+          <p style="margin-bottom: 0;">An engineer copied faulty semiconductor database source code into ChatGPT and asked it to fix the errors. The proprietary code, part of Samsung's core semiconductor intellectual property, was transmitted to OpenAI's servers.</p>
+        </div>
+
+        <div class="incident-block">
+          <div class="incident-number">Incident 2</div>
+          <h3>Equipment test code shared for optimisation</h3>
+          <p style="margin-bottom: 0;">A second employee pasted code used to identify defects in Samsung manufacturing equipment, asking ChatGPT to optimise the test sequence. Again, confidential engineering data left Samsung's control.</p>
+        </div>
+
+        <div class="incident-block">
+          <div class="incident-number">Incident 3</div>
+          <h3>Internal meeting recording transcribed</h3>
+          <p style="margin-bottom: 0;">A third employee asked ChatGPT to generate meeting minutes from a smartphone recording of an internal meeting. The content of the confidential meeting was transmitted to a third-party AI system.</p>
+        </div>
+
+        <p>In each case, proprietary code or internal meeting content was transmitted to ChatGPT's servers, which means it could be incorporated into the model's training data and potentially retrieved by other users.</p>
+
+        <div class="blog-callout">
+          <div class="blog-callout-title">The core problem</div>
+          <p>Employees used generative AI tools for productivity without understanding the privacy implications. When users share data with AI assistants, the information becomes part of the model's data corpus, and there is no reliable way to delete specific prompts.</p>
+        </div>
+
+        <h2>Response and Consequences</h2>
+        <p>After the incidents, Samsung reportedly limited ChatGPT prompts to 1024 bytes and considered disciplinary measures. The company also imposed new policies restricting employees from entering sensitive information into public AI tools.</p>
+        <p>The episodes underscored warnings from security analysts: when users share data with AI assistants, the information becomes part of the model's data corpus, and there is no reliable way to delete specific prompts.</p>
+
+        <h2>Lessons for Enterprise AI Governance</h2>
+        <p>Samsung's experience illustrates the human factor in AI data leaks. This is not a niche risk—a 2025 enterprise security report found that 77% of employees paste sensitive company data into generative AI tools, typically from personal, unmanaged accounts.</p>
+        <ul>
+          <li><strong>Provide clear guidelines.</strong> Organisations must define what can and cannot be shared with AI systems—and communicate this clearly to every employee.</li>
+          <li><strong>Implement technical controls.</strong> Deploy data-loss-prevention tools that block or redact sensitive information before it is sent to AI systems.</li>
+          <li><strong>Monitor prompt activity.</strong> Security teams should have visibility into what data is being sent to AI tools across the organisation.</li>
+          <li><strong>Offer secure alternatives.</strong> Outright bans are ineffective. Enterprise AI deployments with data-retention controls and governance layers are more sustainable.</li>
+          <li><strong>Train employees.</strong> Regular training on AI data privacy should be mandatory for anyone using generative AI tools in their work.</li>
+        </ul>
+
+        <div class="blog-callout">
+          <div class="blog-callout-title">How Prunex Helps Prevent This</div>
+          <p>Prunex acts as a governance layer between enterprise users and AI systems. Policy-based controls detect and block sensitive data—source code, PII, confidential documents—before it reaches external AI systems. Every interaction is inspected, evaluated against your policies, and logged for audit. Employees can still use AI tools productively, but within enforced boundaries that protect your organisation's data.</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="blog-nav">
+          <a href="chatgpt-data-leak-2023.html">&larr; Prev: ChatGPT Data Leak</a>
+          <a href="repeated-token-attack-chatgpt.html">Next: Repeated-Token Attack &rarr;</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Prevent AI data leakage in your organisation</h2>
+          <p>See how Prunex helps enterprises enforce policy and maintain compliance across every AI interaction.</p>
+          <a href="../contact.html" class="btn btn-primary btn-lg">Request a Demo <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-cookie-banner"></div>
+
+  <script src="../../resources/js/components.js"></script>
+  <script src="../../resources/js/main.js"></script>
+</body>
+</html>
