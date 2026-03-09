@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How researchers from Google DeepMind extracted memorised training data from ChatGPT using a $200 repeated-token attack. Lessons for AI model security and data governance.">
+  <title>The $200 Attack That Extracted Training Data from ChatGPT - Prunex Blog</title>
+  <meta property="og:title" content="The $200 Attack That Extracted Training Data from ChatGPT">
+  <meta property="og:description" content="Researchers discovered that repeating single words could coax ChatGPT into leaking memorised training data including personal information.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../resources/css/styles.css">
+  <style>
+    .blog-article { max-width: 740px; margin: 0 auto; padding: 0 24px; }
+    .blog-article-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .blog-article-meta { display: flex; gap: 24px; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 24px; }
+    .blog-article-meta span { display: flex; align-items: center; gap: 6px; }
+    .blog-article-label { display: inline-block; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); background: var(--green); padding: 4px 10px; border-radius: var(--radius-sm); margin-bottom: 16px; }
+    .blog-article h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.2; margin-bottom: 16px; }
+    .blog-article-header p { font-size: 1.0625rem; line-height: 1.8; color: var(--text-secondary); }
+    .blog-article h2 { font-size: 1.5rem; margin-top: 48px; margin-bottom: 16px; }
+    .blog-article h3 { font-size: 1.125rem; margin-top: 32px; margin-bottom: 12px; }
+    .blog-article p { font-size: 1rem; line-height: 1.8; margin-bottom: 20px; }
+    .blog-article ul, .blog-article ol { margin-bottom: 20px; padding-left: 24px; }
+    .blog-article li { font-size: 1rem; line-height: 1.8; margin-bottom: 8px; color: var(--text-secondary); }
+    .blog-article ul li { list-style: disc; }
+    .blog-article ol li { list-style: decimal; }
+    .blog-callout { padding: 24px 28px; background: var(--gray-50); border-left: 3px solid var(--green); border-radius: var(--radius); margin: 32px 0; }
+    .blog-callout p { margin-bottom: 0; font-size: 0.9375rem; }
+    .blog-callout-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+    .blog-key-fact { padding: 24px 28px; background: var(--black); border-radius: var(--radius-lg); margin: 32px 0; }
+    .blog-key-fact h4 { color: var(--white); font-size: 0.875rem; margin-bottom: 12px; }
+    .blog-key-fact ul { padding-left: 20px; }
+    .blog-key-fact li { color: var(--gray-400); font-size: 0.875rem; margin-bottom: 6px; }
+    .blog-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; margin-top: 60px; border-top: 1px solid var(--border); }
+    .blog-nav a { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; transition: gap var(--transition-fast); }
+    .blog-nav a:hover { gap: 12px; }
+    .stat-highlight { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 32px 0; }
+    .stat-highlight-item { text-align: center; padding: 24px 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+    .stat-highlight-value { font-size: 1.75rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em; }
+    .stat-highlight-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    @media (max-width: 768px) {
+      .blog-article-meta { flex-direction: column; gap: 8px; }
+      .stat-highlight { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <section class="hero" style="padding-bottom: 40px;">
+      <div class="blog-article">
+        <a href="../blog.html" style="font-size: 0.8125rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 32px;">&larr; Back to Blog</a>
+
+        <div class="blog-article-header reveal">
+          <div class="blog-article-label">Research</div>
+          <div class="blog-article-meta">
+            <span>December 2023</span>
+            <span>8 min read</span>
+            <span>AI Model Security</span>
+          </div>
+          <h1>The Repeated‑Token Attack: Extracting Training Data from ChatGPT</h1>
+          <p>In December 2023, researchers from Google DeepMind, Cornell University and other institutions demonstrated that a simple prompt-engineering technique could coax ChatGPT into revealing memorised training data—including personal email signatures, contact information, and programming code—for roughly US $200 in API costs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="blog-article reveal">
+
+        <div class="blog-key-fact">
+          <h4>Key Facts</h4>
+          <ul>
+            <li>Researchers from Google DeepMind, Cornell University and other institutions</li>
+            <li>Simple prompt: repeat a single word thousands of times</li>
+            <li>Leaked content: personal emails, contact details, code, URLs, bitcoin addresses</li>
+            <li>10,000+ unique verbatim training examples extracted</li>
+            <li>Total cost: approximately US $200 in ChatGPT API queries</li>
+            <li>Some trigger words were 164× more effective than others</li>
+          </ul>
+        </div>
+
+        <h2>Background</h2>
+        <p>In December 2023 researchers from Google DeepMind, Cornell University and other institutions showed that a simple prompt‑engineering technique could coax ChatGPT into regurgitating memorized training data. The attack, sometimes called a repeated‑token attack, exploits the fact that large language models occasionally memorize and reveal parts of their training corpus when pushed outside of typical operating conditions.</p>
+        <p>This research was significant because it demonstrated that even "closed" AI models—where the training data is not publicly accessible—can be manipulated into revealing their training corpus, raising serious questions about data privacy in AI systems.</p>
+
+        <h2>What Happened</h2>
+        <p>By instructing ChatGPT to repeat single words such as "poem," "company," "send," "make" or "part" thousands of times, the researchers found that after a few hundred repetitions the model began producing snippets of training data.</p>
+        <p>The leaked content included:</p>
+        <ul>
+          <li>Personal email signatures and contact information</li>
+          <li>Verbatim paragraphs from books and poems</li>
+          <li>URLs and user identifiers</li>
+          <li>Bitcoin addresses</li>
+          <li>Programming code</li>
+        </ul>
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item">
+            <div class="stat-highlight-value">$200</div>
+            <div class="stat-highlight-label">Total cost of attack</div>
+          </div>
+          <div class="stat-highlight-item">
+            <div class="stat-highlight-value">10,000+</div>
+            <div class="stat-highlight-label">Unique training examples extracted</div>
+          </div>
+          <div class="stat-highlight-item">
+            <div class="stat-highlight-value">164×</div>
+            <div class="stat-highlight-label">More effective with certain trigger words</div>
+          </div>
+        </div>
+
+        <p>Some trigger words were more effective than others; for example, repeating "company" led to training‑data leakage 164 times more often than less charged words. Using roughly US $200 worth of ChatGPT queries, the researchers extracted more than 10,000 unique verbatim training examples.</p>
+
+        <div class="blog-callout">
+          <div class="blog-callout-title">Why this matters</div>
+          <p>This vulnerability demonstrates that closed AI models can memorize and output sensitive data if they are manipulated with crafted prompts. Any personal or corporate data that was part of the training corpus could potentially be extracted by adversarial users.</p>
+        </div>
+
+        <h2>Response and Consequences</h2>
+        <p>Dark Reading reported that OpenAI was informed of the issue and may have mitigated it by late 2023, though the susceptibility of large models to memorization and extraction remains an open research problem.</p>
+        <p>The incident triggered broader discussions about the privacy risks of training AI systems on indiscriminate web data. The researchers warned that developers should not deploy AI models in privacy‑sensitive contexts without strong safeguards. While the attack did not breach any specific organization, it shows that uncurated data can be exposed via model outputs.</p>
+
+        <h2>Lessons for Enterprise AI Governance</h2>
+        <p>This case illustrates how prompt-engineering attacks can extract training data from generative AI models, creating risks for any organisation whose data may have been included in the training corpus.</p>
+        <ul>
+          <li><strong>Incorporate privacy-preserving techniques.</strong> AI developers should use differential privacy and de-biasing constraints during training to minimize memorization.</li>
+          <li><strong>Conduct regular red-teaming.</strong> Adversarial testing can help identify and patch memorization pathways before they are exploited.</li>
+          <li><strong>Monitor AI outputs.</strong> End-users and organisations should be aware that AI responses may contain copyrighted or sensitive information and should avoid publishing verbatim AI outputs without verification.</li>
+          <li><strong>Implement output governance.</strong> Deploy systems that scan AI outputs for PII, proprietary data, and other sensitive content before it reaches end users.</li>
+          <li><strong>Control training data.</strong> Organisations should audit what data is being used to train or fine-tune AI models and ensure sensitive data is excluded or properly anonymised.</li>
+        </ul>
+
+        <div class="blog-callout">
+          <div class="blog-callout-title">How Prunex Helps Prevent This</div>
+          <p>Prunex inspects and evaluates AI outputs in real time, detecting PII, proprietary data patterns, and sensitive content before it reaches end users. With configurable policy enforcement, organisations can automatically redact or block outputs that contain memorised training data, regardless of how it was triggered. Every enforcement action is logged with full context for audit and compliance review.</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="blog-nav">
+          <a href="samsung-chatgpt-data-leak.html">&larr; Prev: Samsung Data Leak</a>
+          <a href="../blog.html">All articles &rarr;</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Protect your enterprise from AI data extraction</h2>
+          <p>See how Prunex provides real-time output governance to prevent training data leakage and ensure compliance.</p>
+          <a href="../contact.html" class="btn btn-primary btn-lg">Request a Demo <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-cookie-banner"></div>
+
+  <script src="../../resources/js/components.js"></script>
+  <script src="../../resources/js/main.js"></script>
+</body>
+</html>

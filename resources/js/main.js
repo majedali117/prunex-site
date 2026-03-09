@@ -3,20 +3,20 @@
    Navigation, scroll reveal, cookie consent
    =================================================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize components that are dynamically loaded (header, footer, cookie)
+function initDynamicComponents() {
   // --- Sticky header scroll effect ---
   const header = document.querySelector('.header');
   if (header) {
-    let lastScroll = 0;
     window.addEventListener('scroll', () => {
-      const currentScroll = window.scrollY;
-      if (currentScroll > 10) {
+      if (window.scrollY > 10) {
         header.classList.add('scrolled');
       } else {
         header.classList.remove('scrolled');
       }
-      lastScroll = currentScroll;
     }, { passive: true });
+    // Set initial state
+    header.classList.toggle('scrolled', window.scrollY > 10);
   }
 
   // --- Mobile menu toggle ---
@@ -38,24 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
       });
     });
-  }
-
-  // --- Scroll reveal (IntersectionObserver) ---
-  const revealElements = document.querySelectorAll('.reveal');
-  if (revealElements.length > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -40px 0px'
-    });
-
-    revealElements.forEach(el => observer.observe(el));
   }
 
   // --- Cookie consent banner ---
@@ -87,15 +69,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Active nav link highlighting ---
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const currentPath = window.location.pathname;
   const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
 
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
-    if (href === currentPage || (currentPage === '' && href === 'index.html') || (currentPage === 'index.html' && href === 'index.html')) {
+    if (!href) return;
+    
+    // Resolve the link href to an absolute path for comparison
+    const linkUrl = new URL(href, window.location.href).pathname;
+    
+    if (linkUrl === currentPath) {
+      link.classList.add('active');
+    }
+    // Also highlight Blog for blog article pages
+    if (currentPath.includes('/pages/blog/') && href.includes('blog.html')) {
       link.classList.add('active');
     }
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // --- Scroll reveal (IntersectionObserver) ---
+  const revealElements = document.querySelectorAll('.reveal');
+  if (revealElements.length > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => observer.observe(el));
+  }
 
   // --- Contact form handling ---
   const contactForm = document.getElementById('contact-form');
@@ -145,4 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 2000);
     });
   }
+
+  // Listen for components loaded event (fired by components.js)
+  document.addEventListener('componentsLoaded', initDynamicComponents);
 });

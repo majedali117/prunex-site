@@ -253,41 +253,7 @@
   </style>
 </head>
 <body>
-
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <div class="header-inner">
-        <a href="index.html" class="logo" aria-label="Prunex Home">
-          <div class="logo-mark" aria-hidden="true"><img src="resources/images/logo.png" alt="Prunex"></div>
-          <span>Prunex</span>
-        </a>
-
-        <nav class="nav-links" aria-label="Primary navigation">
-          <a href="index.html">Home</a>
-          <a href="pages/about.html">About</a>
-          <a href="pages/offerings.html">Offerings</a>
-          <a href="pages/why-prunex.html">Why Prunex</a>
-          <a href="pages/contact.html">Contact</a>
-        </nav>
-
-        <div class="header-actions">
-          <a href="pages/contact.html" class="btn btn-primary">Request a Demo</a>
-          <button class="menu-toggle" aria-label="Toggle menu">
-            <span></span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mobile-nav">
-      <a href="index.html">Home</a>
-      <a href="pages/about.html">About</a>
-      <a href="pages/offerings.html">Offerings</a>
-      <a href="pages/why-prunex.html">Why Prunex</a>
-      <a href="pages/contact.html">Contact</a>
-    </div>
-  </header>
+  <div id="site-header"></div>
 
   <main>
 
@@ -330,22 +296,23 @@
     </section>
 
     <!-- Trust Stats Bar -->
-    <section class="section-sm section-border-top" style="padding: 32px 0;">
+    <section class="section-sm section-border-top trust-stats">
       <div class="container">
-        <div class="grid grid-3 reveal" style="gap: 24px; text-align: center;">
-          <div style="padding: 20px;">
-            <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em;">68%</div>
-            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;">of enterprises report AI data leakage incidents</div>
+        <div class="grid grid-3 reveal">
+          <div class="trust-stat">
+            <div class="trust-stat-value">68%</div>
+            <div class="trust-stat-label">of enterprises report AI data leakage incidents</div>
           </div>
-          <div style="padding: 20px; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
-            <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em;">$5.1M</div>
-            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;">average cost of a data breach in 2025</div>
+          <div class="trust-stat-divider">
+            <div class="trust-stat-value">$5.1M</div>
+            <div class="trust-stat-label">average cost of a data breach in 2025</div>
           </div>
-          <div style="padding: 20px;">
-            <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.03em;">77%</div>
-            <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px;">of companies reported AI-related security incidents</div>
+          <div class="trust-stat">
+            <div class="trust-stat-value">77%</div>
+            <div class="trust-stat-label">of companies reported AI-related security incidents</div>
           </div>
         </div>
+        <div class="trust-stat-sources reveal">Sources: Cyberhaven 2025 Enterprise DLP Report · IBM/Ponemon Cost of a Data Breach 2025 · HiddenLayer AI Threat Landscape 2025</div>
       </div>
     </section>
 
@@ -360,24 +327,30 @@
 
         <div class="grid grid-3">
           <div class="card reveal reveal-delay-1">
-            <div class="card-icon" style="color: var(--green);">&#9632;</div>
+            <div class="icon">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
             <h3>Policy Control</h3>
             <p>Define, version, and enforce AI usage policies consistently across your organisation's systems and teams.</p>
-            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">Example: Define who can access which AI models, with what data, under what conditions.</p>
+            <p class="card-example">Example: Define who can access which AI models, with what data, under what conditions.</p>
           </div>
 
           <div class="card reveal reveal-delay-2">
-            <div class="card-icon" style="color: var(--green);">&#9678;</div>
+            <div class="icon">
+              <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
             <h3>Compliance Readiness</h3>
             <p>Map governance controls to regulatory requirements and generate structured evidence for audits and reviews.</p>
-            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">Example: Auto-generate audit trails aligned to EU AI Act, NIST AI RMF, or ISO 42001.</p>
+            <p class="card-example">Example: Auto-generate audit trails aligned to EU AI Act, GDPR, HIPAA, NIST AI RMF, or ISO 42001.</p>
           </div>
 
           <div class="card reveal reveal-delay-3">
-            <div class="card-icon" style="color: var(--green);">&#9671;</div>
+            <div class="icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            </div>
             <h3>Responsible AI</h3>
             <p>Embed fairness, transparency, and ethical oversight into AI operations as standard practice, not an afterthought.</p>
-            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">Example: Detect and flag biased outputs, block sensitive data exposure, log every decision.</p>
+            <p class="card-example">Example: Detect and flag biased outputs, block sensitive data exposure, log every decision.</p>
           </div>
         </div>
       </div>
@@ -391,30 +364,30 @@
           <div class="reveal">
             <span class="eyebrow">The Landscape</span>
             <h2>Why AI governance matters now</h2>
-            <p style="margin-bottom: 24px;">Enterprises are deploying AI at pace. But governance has not kept up. Without structured controls, organisations face regulatory risk, reputational exposure, and operational gaps they cannot easily close later.</p>
+            <p class="mb-24">Enterprises are deploying AI at pace. But governance has not kept up. Without structured controls, organisations face regulatory risk, reputational exposure, and operational gaps they cannot easily close later.</p>
             <div class="feature-list">
-              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+              <div class="feature-list-item feature-list-item-compact">
                 <div class="feature-list-icon"></div>
                 <div>
                   <h4>Accelerating AI adoption</h4>
                   <p>AI is moving from experiments to production across every enterprise function. Governance must be operational, not theoretical.</p>
                 </div>
               </div>
-              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+              <div class="feature-list-item feature-list-item-compact">
                 <div class="feature-list-icon"></div>
                 <div>
                   <h4>Fragmented oversight</h4>
                   <p>Most organisations rely on scattered policies, manual reviews, and team-level controls. This creates blind spots and inconsistency.</p>
                 </div>
               </div>
-              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+              <div class="feature-list-item feature-list-item-compact">
                 <div class="feature-list-icon"></div>
                 <div>
                   <h4>Rising compliance expectations</h4>
                   <p>Regulators, boards, and customers expect verifiable AI governance. Written policies alone are no longer sufficient.</p>
                 </div>
               </div>
-              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+              <div class="feature-list-item feature-list-item-compact">
                 <div class="feature-list-icon"></div>
                 <div>
                   <h4>Responsible AI as an imperative</h4>
@@ -425,20 +398,20 @@
           </div>
 
           <div class="reveal reveal-delay-2">
-            <div class="card" style="background: var(--black); padding: 40px;">
+            <div class="card card-dark-lg">
               <h3 style="color: var(--white); margin-bottom: 20px;">The cost of waiting</h3>
-              <div style="display: grid; gap: 16px;">
-                <div style="padding: 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
-                  <div style="font-weight: 700; color: var(--white); margin-bottom: 4px;">Regulatory exposure</div>
-                  <div style="font-size: 0.875rem; color: var(--gray-500);">Non-compliance penalties grow as AI regulation matures globally.</div>
+              <div class="dark-info-grid">
+                <div class="dark-info-block">
+                  <div class="dark-info-block-title">Regulatory exposure</div>
+                  <div class="dark-info-block-text">Non-compliance penalties grow as AI regulation matures globally.</div>
                 </div>
-                <div style="padding: 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
-                  <div style="font-weight: 700; color: var(--white); margin-bottom: 4px;">Stalled deployments</div>
-                  <div style="font-size: 0.875rem; color: var(--gray-500);">Without governance, compliance and security teams block production rollouts.</div>
+                <div class="dark-info-block">
+                  <div class="dark-info-block-title">Stalled deployments</div>
+                  <div class="dark-info-block-text">Without governance, compliance and security teams block production rollouts.</div>
                 </div>
-                <div style="padding: 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
-                  <div style="font-weight: 700; color: var(--white); margin-bottom: 4px;">Reputational risk</div>
-                  <div style="font-size: 0.875rem; color: var(--gray-500);">Uncontrolled AI outputs can cause real harm and public trust erosion.</div>
+                <div class="dark-info-block">
+                  <div class="dark-info-block-title">Reputational risk</div>
+                  <div class="dark-info-block-text">Uncontrolled AI outputs can cause real harm and public trust erosion.</div>
                 </div>
               </div>
             </div>
@@ -458,34 +431,37 @@
         </div>
 
         <div class="grid grid-3">
-          <div class="card reveal reveal-delay-1" style="background: var(--black); padding: 32px;">
-            <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;">Case Study</div>
-            <h3 style="color: var(--white); margin-bottom: 12px;">Samsung Source Code Leak</h3>
-            <p style="color: var(--gray-400); margin-bottom: 16px;">Samsung employees pasted proprietary semiconductor source code and internal meeting recordings into ChatGPT. Confidential data entered a third-party AI system with no retrieval mechanism.</p>
-            <div style="padding: 12px 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
-              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px;">How Prunex helps prevent this</div>
-              <div style="font-size: 0.8125rem; color: var(--gray-400);">Policy-based controls that detect and block sensitive data before it reaches external AI systems. Every interaction inspected, evaluated, and logged.</div>
+          <div class="card card-dark reveal reveal-delay-1">
+            <div class="case-study-label">Case Study</div>
+            <h3>Samsung Source Code Leak</h3>
+            <p>Samsung employees pasted proprietary semiconductor source code and internal meeting recordings into ChatGPT. Confidential data entered a third-party AI system with no retrieval mechanism.</p>
+            <div class="case-study-prevention">
+              <div class="case-study-prevention-title">How Prunex helps prevent this</div>
+              <div class="case-study-prevention-text">Policy-based controls that detect and block sensitive data before it reaches external AI systems. Every interaction inspected, evaluated, and logged.</div>
             </div>
+            <a href="pages/blog/samsung-chatgpt-data-leak.html" class="case-study-link">Read full analysis <span>&rarr;</span></a>
           </div>
 
-          <div class="card reveal reveal-delay-2" style="background: var(--black); padding: 32px;">
-            <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;">Case Study</div>
-            <h3 style="color: var(--white); margin-bottom: 12px;">ChatGPT Payment Data Exposure</h3>
-            <p style="color: var(--gray-400); margin-bottom: 16px;">A bug in ChatGPT's infrastructure exposed chat histories and payment information of 1.2% of Plus subscribers, including names, email addresses, and partial credit card numbers.</p>
-            <div style="padding: 12px 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
-              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px;">How Prunex helps prevent this</div>
-              <div style="font-size: 0.8125rem; color: var(--gray-400);">Continuous monitoring of AI system outputs for PII exposure. Automated redaction and audit logging of every data flow.</div>
+          <div class="card card-dark reveal reveal-delay-2">
+            <div class="case-study-label">Case Study</div>
+            <h3>ChatGPT Payment Data Exposure</h3>
+            <p>A bug in ChatGPT's infrastructure exposed chat histories and payment information of 1.2% of Plus subscribers, including names, email addresses, and partial credit card numbers.</p>
+            <div class="case-study-prevention">
+              <div class="case-study-prevention-title">How Prunex helps prevent this</div>
+              <div class="case-study-prevention-text">Continuous monitoring of AI system outputs for PII exposure. Automated redaction and audit logging of every data flow.</div>
             </div>
+            <a href="pages/blog/chatgpt-data-leak-2023.html" class="case-study-link">Read full analysis <span>&rarr;</span></a>
           </div>
 
-          <div class="card reveal reveal-delay-3" style="background: var(--black); padding: 32px;">
-            <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;">Industry Data</div>
-            <h3 style="color: var(--white); margin-bottom: 12px;">Shadow AI Is the Norm</h3>
-            <p style="color: var(--gray-400); margin-bottom: 16px;">68% of enterprises report AI data leakage from employees sharing sensitive information with AI tools. Only 23% have comprehensive security policies addressing these risks.</p>
-            <div style="padding: 12px 16px; border: 1px solid var(--gray-800); border-radius: var(--radius); background: var(--gray-900);">
-              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px;">How Prunex helps prevent this</div>
-              <div style="font-size: 0.8125rem; color: var(--gray-400);">Enterprise-wide governance layer that enforces policy across every AI interaction, regardless of the tool or model employees use.</div>
+          <div class="card card-dark reveal reveal-delay-3">
+            <div class="case-study-label">Industry Data</div>
+            <h3>Shadow AI Is the Norm</h3>
+            <p>68% of enterprises report AI data leakage from employees sharing sensitive information with AI tools. Only 23% have comprehensive security policies addressing these risks.</p>
+            <div class="case-study-prevention">
+              <div class="case-study-prevention-title">How Prunex helps prevent this</div>
+              <div class="case-study-prevention-text">Enterprise-wide governance layer that enforces policy across every AI interaction, regardless of the tool or model employees use.</div>
             </div>
+            <a href="pages/blog/repeated-token-attack-chatgpt.html" class="case-study-link">Read full analysis <span>&rarr;</span></a>
           </div>
         </div>
       </div>
@@ -616,22 +592,30 @@
           <p>Prunex is designed to support governance requirements across major regulatory and compliance frameworks.</p>
         </div>
 
-        <div class="grid grid-4 reveal">
-          <div class="card" style="text-align: center; padding: 32px 24px;">
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">EU AI Act</div>
-            <p style="font-size: 0.8125rem;">Risk classification, transparency obligations, and documentation requirements for AI systems deployed in or serving the EU.</p>
+        <div class="grid grid-3 reveal" style="gap: 16px;">
+          <div class="card framework-card">
+            <div class="framework-card-name">EU AI Act</div>
+            <p class="text-xs">Risk classification, transparency obligations, and documentation requirements for AI systems deployed in or serving the EU.</p>
           </div>
-          <div class="card" style="text-align: center; padding: 32px 24px;">
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">NIST AI RMF</div>
-            <p style="font-size: 0.8125rem;">Structured approach to AI risk management aligned with the NIST Artificial Intelligence Risk Management Framework.</p>
+          <div class="card framework-card">
+            <div class="framework-card-name">GDPR</div>
+            <p class="text-xs">Data protection and privacy requirements for AI systems processing personal data of EU residents, including automated decision-making safeguards.</p>
           </div>
-          <div class="card" style="text-align: center; padding: 32px 24px;">
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">ISO 42001</div>
-            <p style="font-size: 0.8125rem;">Support for organisations pursuing AI management system certification under the ISO/IEC 42001 standard.</p>
+          <div class="card framework-card">
+            <div class="framework-card-name">HIPAA</div>
+            <p class="text-xs">Safeguards for AI systems handling protected health information, supporting compliance with healthcare data privacy and security requirements.</p>
           </div>
-          <div class="card" style="text-align: center; padding: 32px 24px;">
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">SOC 2</div>
-            <p style="font-size: 0.8125rem;">Audit-ready evidence and controls documentation to support SOC 2 trust service criteria for AI operations.</p>
+          <div class="card framework-card">
+            <div class="framework-card-name">NIST AI RMF</div>
+            <p class="text-xs">Structured approach to AI risk management aligned with the NIST Artificial Intelligence Risk Management Framework.</p>
+          </div>
+          <div class="card framework-card">
+            <div class="framework-card-name">ISO 42001</div>
+            <p class="text-xs">Support for organisations pursuing AI management system certification under the ISO/IEC 42001 standard.</p>
+          </div>
+          <div class="card framework-card">
+            <div class="framework-card-name">SOC 2</div>
+            <p class="text-xs">Audit-ready evidence and controls documentation to support SOC 2 trust service criteria for AI operations.</p>
           </div>
         </div>
       </div>
@@ -696,62 +680,12 @@
     </section>
 
   </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="footer-logo">
-            <div class="logo-mark" aria-hidden="true"><img src="resources/images/logo.png" alt="Prunex"></div>
-            <span>Prunex</span>
-          </div>
-          <p>Enterprise AI governance through policy control, compliance support, responsible AI oversight, and auditability.</p>
-        </div>
-
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="pages/about.html">About</a>
-          <a href="pages/offerings.html">Offerings</a>
-          <a href="pages/why-prunex.html">Why Prunex</a>
-          <a href="pages/contact.html">Contact</a>
-        </div>
-
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="pages/privacy.html">Privacy Policy</a>
-          <a href="pages/cookies.html">Cookie Policy</a>
-          <a href="pages/cookies.html#settings">Cookie Settings</a>
-        </div>
-
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <a href="mailto:info@prunex.ai">info@prunex.ai</a>
-          <a href="https://www.linkedin.com/company/prunex" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <span>&copy; 2026 Prunex. All rights reserved.</span>
-        <div class="footer-bottom-links">
-          <a href="pages/privacy.html">Privacy</a>
-          <a href="pages/cookies.html">Cookies</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <div id="site-footer"></div>
 
   <!-- Cookie Banner -->
-  <div class="cookie-banner" role="dialog" aria-label="Cookie consent">
-    <div class="cookie-banner-inner">
-      <p>We use cookies to improve your experience. By continuing to visit this site you agree to our use of cookies. <a href="pages/cookies.html">Learn more</a>.</p>
-      <div class="cookie-banner-actions">
-        <button class="btn btn-sm" id="cookie-decline">Decline</button>
-        <button class="btn btn-primary btn-sm" id="cookie-accept">Accept</button>
-      </div>
-    </div>
-  </div>
+  <div id="site-cookie-banner"></div>
 
+  <script src="resources/js/components.js"></script>
   <script src="resources/js/main.js"></script>
 </body>
 </html>

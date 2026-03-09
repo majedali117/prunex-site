@@ -256,8 +256,8 @@ p {
 }
 
 .logo-mark {
-  width: 120px;
-  height: 120px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -773,8 +773,8 @@ p {
 }
 
 .footer-logo .logo-mark {
-  width: 102px;
-  height: 102px;
+  width: 28px;
+  height: 28px;
 }
 
 .footer-logo .logo-mark img {
@@ -1191,4 +1191,222 @@ p {
 .toggle-switch input:disabled + .toggle-slider {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+
+/* --- Trust Stats Bar --- */
+.trust-stats {
+  padding: 32px 0;
+}
+
+.trust-stats .grid {
+  gap: 24px;
+  text-align: center;
+}
+
+.trust-stat {
+  padding: 20px;
+}
+
+.trust-stat-divider {
+  padding: 20px;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.trust-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.trust-stat-label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.trust-stat-sources {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.6875rem;
+  color: var(--gray-400);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .trust-stat-divider {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+
+/* --- Card Variants --- */
+.card-dark {
+  background: var(--black);
+  border-color: var(--gray-800);
+  padding: 32px;
+}
+
+.card-dark:hover {
+  border-color: var(--gray-700);
+}
+
+.card-dark h3 {
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.card-dark p {
+  color: var(--gray-400);
+  margin-bottom: 16px;
+}
+
+.card-dark-lg {
+  background: var(--black);
+  border-color: var(--gray-800);
+  padding: 40px;
+}
+
+
+/* --- Case Study Cards --- */
+.case-study-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 16px;
+}
+
+.case-study-prevention {
+  padding: 12px 16px;
+  border: 1px solid var(--gray-800);
+  border-radius: var(--radius);
+  background: var(--gray-900);
+}
+
+.case-study-prevention-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+
+.case-study-prevention-text {
+  font-size: 0.8125rem;
+  color: var(--gray-400);
+  margin-bottom: 0;
+}
+
+.case-study-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  margin-top: 12px;
+  transition: color var(--transition-fast), gap var(--transition-fast);
+}
+
+.case-study-link:hover {
+  color: var(--white);
+  gap: 10px;
+}
+
+
+/* --- Dark Info Block --- */
+.dark-info-block {
+  padding: 16px;
+  border: 1px solid var(--gray-800);
+  border-radius: var(--radius);
+  background: var(--gray-900);
+}
+
+.dark-info-block-title {
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.dark-info-block-text {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  margin-bottom: 0;
+}
+
+.dark-info-grid {
+  display: grid;
+  gap: 16px;
+}
+
+
+/* --- Card Example --- */
+.card-example {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+
+/* --- Feature List Compact --- */
+.feature-list-item-compact {
+  border: none;
+  padding: 12px 0;
+}
+
+
+/* --- Compliance Framework Card --- */
+.framework-card {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.framework-card-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+
+/* --- SVG Icon System --- */
+.icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-100);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--green);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-sm {
+  width: 40px;
+  height: 40px;
+}
+
+.icon-sm svg {
+  width: 18px;
+  height: 18px;
 }

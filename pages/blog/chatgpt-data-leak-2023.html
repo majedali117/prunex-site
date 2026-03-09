@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How a bug in an open-source Redis library caused ChatGPT to leak user chat histories and payment data in March 2023. Lessons for AI platform security and governance.">
+  <title>The ChatGPT Bug That Exposed User Payment Data - Prunex Blog</title>
+  <meta property="og:title" content="The ChatGPT Bug That Exposed User Payment Data">
+  <meta property="og:description" content="A platform-level data leak exposed chat histories and payment details of 1.2% of ChatGPT Plus subscribers.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../resources/css/styles.css">
+  <style>
+    .blog-article {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .blog-article-header {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .blog-article-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .blog-article-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .blog-article-label {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--green);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+
+    .blog-article h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .blog-article-header p {
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .blog-article h2 {
+      font-size: 1.5rem;
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+
+    .blog-article h3 {
+      font-size: 1.125rem;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+
+    .blog-article p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .blog-article ul, .blog-article ol {
+      margin-bottom: 20px;
+      padding-left: 24px;
+    }
+
+    .blog-article li {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .blog-article ul li { list-style: disc; }
+    .blog-article ol li { list-style: decimal; }
+
+    .blog-callout {
+      padding: 24px 28px;
+      background: var(--gray-50);
+      border-left: 3px solid var(--green);
+      border-radius: var(--radius);
+      margin: 32px 0;
+    }
+
+    .blog-callout p {
+      margin-bottom: 0;
+      font-size: 0.9375rem;
+    }
+
+    .blog-callout-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .blog-key-fact {
+      padding: 24px 28px;
+      background: var(--black);
+      border-radius: var(--radius-lg);
+      margin: 32px 0;
+    }
+
+    .blog-key-fact h4 {
+      color: var(--white);
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+    }
+
+    .blog-key-fact ul {
+      padding-left: 20px;
+    }
+
+    .blog-key-fact li {
+      color: var(--gray-400);
+      font-size: 0.875rem;
+      margin-bottom: 6px;
+    }
+
+    .blog-image {
+      width: 100%;
+      margin: 32px 0;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .blog-image img {
+      width: 100%;
+      height: auto;
+    }
+
+    .blog-image-caption {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 12px 16px;
+      background: var(--gray-50);
+    }
+
+    .blog-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 40px;
+      margin-top: 60px;
+      border-top: 1px solid var(--border);
+    }
+
+    .blog-nav a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: gap var(--transition-fast);
+    }
+
+    .blog-nav a:hover { gap: 12px; }
+
+    @media (max-width: 768px) {
+      .blog-article-meta { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <section class="hero" style="padding-bottom: 40px;">
+      <div class="blog-article">
+        <a href="../blog.html" style="font-size: 0.8125rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px; margin-bottom: 32px;">&larr; Back to Blog</a>
+
+        <div class="blog-article-header reveal">
+          <div class="blog-article-label">Case Study</div>
+          <div class="blog-article-meta">
+            <span>March 2023</span>
+            <span>8 min read</span>
+            <span>AI Platform Security</span>
+          </div>
+          <h1>The March 2023 ChatGPT Bug: A Platform‑Level Data Leak</h1>
+          <p>On 20 March 2023, a bug in an open-source Redis library caused ChatGPT to leak user chat histories and payment information, exposing how a single dependency vulnerability can compromise data at scale.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="blog-article reveal">
+
+        <div class="blog-key-fact">
+          <h4>Key Facts</h4>
+          <ul>
+            <li>Bug in redis‑py open-source library corrupted connection pools</li>
+            <li>Users saw other users' chat titles and first messages</li>
+            <li>Payment data of ~1.2% of ChatGPT Plus subscribers was exposed</li>
+            <li>Exposed data included names, emails, payment addresses, and partial credit card numbers</li>
+            <li>Led to Italy temporarily banning ChatGPT and a €15 million fine for OpenAI</li>
+          </ul>
+        </div>
+
+        <h2>Background</h2>
+        <p>On 20 March 2023 OpenAI briefly shut down ChatGPT after discovering that a bug in the redis‑py open‑source library corrupted connection pools and returned data to the wrong users. During the outage, some users saw other users' chat titles and first messages in their history. More seriously, OpenAI's post‑mortem revealed that the bug also exposed payment details for about 1.2% of ChatGPT Plus subscribers.</p>
+
+        <h2>What Happened</h2>
+        <p>The bug was triggered when a server‑side change increased the number of canceled requests. In certain race‑condition scenarios, the redis‑py client returned data from the wrong cache connection, making it possible for a user to see another active user's chat title or first message.</p>
+        <p>If a user opened the "My account" page or subscription confirmation emails during a specific nine‑hour window on 20 March 2023, they could also see another user's first and last name, email address, payment address and credit‑card type along with the last four digits and expiration date. Full card numbers were not exposed.</p>
+
+        <div class="blog-callout">
+          <div class="blog-callout-title">Impact</div>
+          <p>A seemingly minor open-source library bug caused a high-impact data leak affecting millions of users. The incident demonstrated that AI platform security is only as strong as its weakest dependency.</p>
+        </div>
+
+        <h2>Response and Consequences</h2>
+        <p>OpenAI took ChatGPT offline while patching the bug, fixed the underlying Redis client issue and added redundant checks to ensure cached data is returned to the correct user. The company notified affected users and apologized publicly.</p>
+        <p>Nevertheless, the incident had broader implications. Italy's data‑protection authority cited this bug, along with concerns about lawful data processing and age verification, when it temporarily banned ChatGPT in March 2023 and later fined OpenAI €15 million.</p>
+
+        <h2>Lessons for Enterprise AI Governance</h2>
+        <p>This event shows that AI providers must rigorously test third‑party dependencies and failure modes. Even a seemingly minor open‑source library bug can cause a high‑impact data leak when millions of users rely on a platform.</p>
+        <ul>
+          <li><strong>Test dependencies rigorously.</strong> Third-party libraries are attack surfaces. AI platforms must stress-test every dependency under failure conditions.</li>
+          <li><strong>Implement redundant validation.</strong> Providers should cross-check cache data against authenticated user IDs before sending responses.</li>
+          <li><strong>Prepare incident-response plans.</strong> Privacy and data-protection compliance are critical for AI services. Companies must establish transparency practices before launching AI products.</li>
+          <li><strong>Monitor regulatory implications.</strong> Regulators' reactions illustrate that AI data breaches carry heavier consequences than traditional software bugs.</li>
+        </ul>
+
+        <div class="blog-callout">
+          <div class="blog-callout-title">How Prunex Helps Prevent This</div>
+          <p>Prunex provides continuous monitoring of AI system outputs for PII and sensitive data exposure. With policy-based enforcement, automated redaction, and comprehensive audit logging of every data flow, organisations can detect and prevent data leakage before it reaches end users—regardless of the underlying platform.</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="blog-nav">
+          <a href="../blog.html">&larr; All articles</a>
+          <a href="samsung-chatgpt-data-leak.html">Next: Samsung Data Leak &rarr;</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Prevent AI data leakage in your organisation</h2>
+          <p>See how Prunex helps enterprises enforce policy and maintain compliance across every AI interaction.</p>
+          <a href="../contact.html" class="btn btn-primary btn-lg">Request a Demo <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="site-footer"></div>
+  <div id="site-cookie-banner"></div>
+
+  <script src="../../resources/js/components.js"></script>
+  <script src="../../resources/js/main.js"></script>
+</body>
+</html>
