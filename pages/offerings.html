@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Prunex offerings - AI policy governance layer, compliance and auditability, and responsible AI oversight for enterprise environments.">
+  <title>Offerings - Prunex</title>
+  <meta property="og:title" content="Offerings - Prunex">
+  <meta property="og:description" content="Enterprise AI governance offerings: policy control, compliance, responsible AI, and auditability.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../resources/css/styles.css">
+  <style>
+    /* Offering blocks */
+    .offering {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .offering:last-child {
+      margin-bottom: 0;
+    }
+
+    .offering-content {
+      padding: 48px 40px;
+    }
+
+    .offering-content .eyebrow {
+      margin-bottom: 16px;
+    }
+
+    .offering-content h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    .offering-content > p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .offering-features {
+      display: grid;
+      gap: 12px;
+    }
+
+    .offering-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .offering-feature-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .offering-visual {
+      background: var(--gray-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      border-left: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offering-visual-icon {
+      width: 120px;
+      height: 120px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .offering-visual-icon::before {
+      content: '';
+      width: 60px;
+      height: 60px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
+    }
+
+    /* Geometric bg lines */
+    .offering-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--gray-200) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gray-200) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.4;
+    }
+
+    .offering:nth-child(even) {
+      direction: rtl;
+    }
+
+    .offering:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .offering:nth-child(even) .offering-visual {
+      border-left: none;
+      border-right: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .offering { grid-template-columns: 1fr; }
+      .offering:nth-child(even) { direction: ltr; }
+      .offering-visual { min-height: 200px; border-left: none !important; border-right: none !important; border-top: 1px solid var(--border); }
+      .offering-content { padding: 32px 24px; }
+    }
+
+    /* Use cases */
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .usecase-item {
+      padding: 28px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .usecase-item:hover {
+      border-color: var(--green);
+      background: var(--gray-50);
+    }
+
+    .usecase-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      font-size: 1rem;
+    }
+
+    .usecase-item h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 1024px) {
+      .usecase-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .usecase-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Integration diagram */
+    .integration-diagram {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px 32px;
+      background: var(--gray-50);
+      position: relative;
+    }
+
+    .integration-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .integration-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .integration-box {
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-align: center;
+      min-width: 130px;
+    }
+
+    .integration-center {
+      border-color: var(--green);
+      border-width: 2px;
+      font-weight: 700;
+      min-width: 160px;
+      padding: 18px 24px;
+    }
+
+    .integration-center span {
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .integration-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      color: var(--gray-400);
+      font-size: 1.125rem;
+      flex-shrink: 0;
+    }
+
+    .integration-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .integration-row { flex-direction: column; gap: 0; }
+      .integration-arrow { transform: rotate(90deg); width: auto; height: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="../index.html" class="logo" aria-label="Prunex Home">
+          <div class="logo-mark" aria-hidden="true"><img src="../resources/images/logo.png" alt="Prunex"></div>
+          <span>Prunex</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="../index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="offerings.html">Offerings</a>
+          <a href="why-prunex.html">Why Prunex</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="header-actions">
+          <a href="contact.html" class="btn btn-primary">Request a Demo</a>
+          <button class="menu-toggle" aria-label="Toggle menu"><span></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-nav">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="offerings.html">Offerings</a>
+      <a href="why-prunex.html">Why Prunex</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1. Page Intro -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-centered reveal">
+          <span class="eyebrow">Our Offerings</span>
+          <h1>What Prunex Offers</h1>
+          <p>Prunex helps enterprises strengthen AI governance through structured policy control, compliance support, responsible AI oversight, and continuous auditability. Each capability is designed to work independently or as part of a unified governance programme.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 2, 3, 4. Three Offerings -->
+    <section class="section section-border-top">
+      <div class="container">
+
+        <!-- Offering 1 -->
+        <div class="offering reveal">
+          <div class="offering-content">
+            <span class="eyebrow">Offering 01</span>
+            <h2>AI Policy Governance Layer</h2>
+            <p>Prunex provides a centralised policy control layer that helps enterprises govern AI interactions consistently across teams, systems, and environments.</p>
+            <div class="offering-features">
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Centralised policy definitions with versioning and change tracking</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Governance applied across prompts, responses, tool calls, and data flows</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Strengthened oversight across enterprise AI usage, from copilots to agent-based systems</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Scope-based controls by team, environment, use case, or risk level</span>
+              </div>
+            </div>
+            <div style="margin-top: 20px; padding: 16px; background: var(--gray-50); border-radius: var(--radius); border: 1px solid var(--border);">
+              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 6px;">Example policies</div>
+              <div style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.7;">No customer PII in AI prompts. No medical advice without human review. No model access without role-based authorisation. No sensitive data sent to third-party AI tools.</div>
+            </div>
+          </div>
+          <div class="offering-visual">
+            <div class="offering-visual-icon"></div>
+          </div>
+        </div>
+
+        <!-- Offering 2 -->
+        <div class="offering reveal">
+          <div class="offering-content">
+            <span class="eyebrow">Offering 02</span>
+            <h2>Compliance and Auditability</h2>
+            <p>Prunex helps organisations improve governance visibility and maintain structured, audit-ready records of AI system operations and policy enforcement.</p>
+            <div class="offering-features">
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Improved governance visibility across AI interactions and decision points</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Structured audit-ready records with full decision context and policy references</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Support for accountability programs and internal compliance reviews</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Exportable evidence packages for regulators and external auditors</span>
+              </div>
+            </div>
+            <div style="margin-top: 20px; padding: 16px; background: var(--gray-50); border-radius: var(--radius); border: 1px solid var(--border);">
+              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 6px;">Supported frameworks</div>
+              <div style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.7;">EU AI Act, NIST AI RMF, ISO/IEC 42001, SOC 2, and sector-specific regulatory requirements.</div>
+            </div>
+          </div>
+          <div class="offering-visual">
+            <div class="offering-visual-icon"></div>
+          </div>
+        </div>
+
+        <!-- Offering 3 -->
+        <div class="offering reveal">
+          <div class="offering-content">
+            <span class="eyebrow">Offering 03</span>
+            <h2>Responsible AI Oversight</h2>
+            <p>Prunex helps enable stronger ethical and governance safeguards across AI operations, supporting detection of problematic outputs and continuous oversight.</p>
+            <div class="offering-features">
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Support for detecting bias, discrimination, and problematic AI outputs</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Strengthened ethical and governance safeguards embedded in standard operations</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Continuous oversight of AI behaviour, decisions, and outputs</span>
+              </div>
+              <div class="offering-feature">
+                <div class="offering-feature-dot"></div>
+                <span>Configurable thresholds and escalation workflows for policy violations</span>
+              </div>
+            </div>
+            <div style="margin-top: 20px; padding: 16px; background: var(--gray-50); border-radius: var(--radius); border: 1px solid var(--border);">
+              <div style="font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 6px;">Detection examples</div>
+              <div style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.7;">Biased hiring recommendations. Sensitive medical data in outputs. Hallucinated legal citations. Discriminatory language patterns.</div>
+            </div>
+          </div>
+          <div class="offering-visual">
+            <div class="offering-visual-icon"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- 5. Use Cases -->
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header-center reveal">
+          <span class="eyebrow">Use Cases</span>
+          <h2>Where Prunex applies</h2>
+          <p>Prunex supports governance across a range of enterprise AI deployments.</p>
+        </div>
+
+        <div class="usecase-grid reveal">
+          <div class="usecase-item">
+            <div class="usecase-icon">&#9636;</div>
+            <h4>Enterprise AI Assistants</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Govern copilots and assistants that access internal data and systems</p>
+          </div>
+
+          <div class="usecase-item">
+            <div class="usecase-icon">&#9638;</div>
+            <h4>Internal Copilots</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Policy controls for developer, legal, and HR AI tools</p>
+          </div>
+
+          <div class="usecase-item">
+            <div class="usecase-icon">&#9672;</div>
+            <h4>Customer-Facing AI</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Ensure chatbots and AI interfaces meet compliance standards</p>
+          </div>
+
+          <div class="usecase-item">
+            <div class="usecase-icon">&#9654;</div>
+            <h4>AI-Enabled Workflows</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Govern automated decision-making and AI-driven processes</p>
+          </div>
+
+          <div class="usecase-item">
+            <div class="usecase-icon">&#9670;</div>
+            <h4>Agent-Based Systems</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Oversight for autonomous AI agents with tool access</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 6. Integration / Fit -->
+    <section class="section section-border-top">
+      <div class="container">
+        <div class="grid grid-2" style="gap: 60px; align-items: center;">
+          <div class="reveal">
+            <span class="eyebrow">Enterprise Fit</span>
+            <h2>How Prunex fits into your environment</h2>
+            <p style="margin-bottom: 20px;">Prunex operates as a governance layer between enterprise users, applications, and AI capabilities. It integrates into existing architectures without requiring changes to underlying AI systems or workflows.</p>
+            <div class="feature-list">
+              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+                <div class="feature-list-icon"></div>
+                <div>
+                  <h4>Non-disruptive integration</h4>
+                  <p>Prunex works alongside existing identity, logging, and infrastructure systems.</p>
+                </div>
+              </div>
+              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+                <div class="feature-list-icon"></div>
+                <div>
+                  <h4>Model and vendor agnostic</h4>
+                  <p>Governance applied consistently regardless of the AI model, provider, or framework in use.</p>
+                </div>
+              </div>
+              <div class="feature-list-item" style="border: none; padding: 12px 0;">
+                <div class="feature-list-icon"></div>
+                <div>
+                  <h4>Scales with adoption</h4>
+                  <p>Start with one use case. Expand governance across teams and environments as AI usage grows.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal reveal-delay-2">
+            <div class="integration-diagram">
+              <div class="integration-row">
+                <div class="integration-col">
+                  <div class="integration-label">Enterprise</div>
+                  <div class="integration-box">Users</div>
+                  <div class="integration-box">Applications</div>
+                  <div class="integration-box">Internal Tools</div>
+                </div>
+
+                <div class="integration-arrow">&rarr;</div>
+
+                <div class="integration-col">
+                  <div class="integration-label">Governance</div>
+                  <div class="integration-center">
+                    Prunex
+                    <span>Policy &middot; Compliance &middot; Audit</span>
+                  </div>
+                </div>
+
+                <div class="integration-arrow">&rarr;</div>
+
+                <div class="integration-col">
+                  <div class="integration-label">AI Layer</div>
+                  <div class="integration-box">AI Models</div>
+                  <div class="integration-box">Agents</div>
+                  <div class="integration-box">AI Outputs</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 7. Final CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-block reveal">
+          <h2>Explore how Prunex can fit your AI environment</h2>
+          <p>Contact our team to discuss your governance requirements and see how our offerings align with your needs.</p>
+          <a href="contact.html" class="btn btn-primary btn-lg">Contact Us <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-mark" aria-hidden="true"><img src="../resources/images/logo.png" alt="Prunex"></div>
+            <span>Prunex</span>
+          </div>
+          <p>Enterprise AI governance through policy control, compliance support, responsible AI oversight, and auditability.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="offerings.html">Offerings</a>
+          <a href="why-prunex.html">Why Prunex</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="cookies.html">Cookie Policy</a>
+          <a href="cookies.html#settings">Cookie Settings</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:info@prunex.ai">info@prunex.ai</a>
+          <a href="https://www.linkedin.com/company/prunex" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Prunex. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cookie-banner" role="dialog" aria-label="Cookie consent">
+    <div class="cookie-banner-inner">
+      <p>We use cookies to improve your experience. By continuing to visit this site you agree to our use of cookies. <a href="cookies.html">Learn more</a>.</p>
+      <div class="cookie-banner-actions">
+        <button class="btn btn-sm" id="cookie-decline">Decline</button>
+        <button class="btn btn-primary btn-sm" id="cookie-accept">Accept</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../resources/js/main.js"></script>
+</body>
+</html>
