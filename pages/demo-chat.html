@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Prunex full-page AI chat demo with model selection and sensitive data safeguards.">
+  <title>AI Chat Demo - Prunex</title>
+  <meta property="og:title" content="AI Chat Demo - Prunex">
+  <meta property="og:description" content="Full-page AI chat demo with LLM selection and sensitive data protection.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../resources/css/styles.css">
+  <style>
+    .chat-demo-wrap {
+      min-height: calc(100vh - 72px);
+      background: linear-gradient(to bottom, var(--gray-50), var(--white));
+      padding: 32px 0 48px;
+    }
+
+    .chat-demo-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .chat-side,
+    .chat-main {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chat-side {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .chat-side h2 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .chat-side p {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .llm-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .llm-option {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      text-align: left;
+      color: var(--text-primary);
+      background: var(--white);
+      transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .llm-option:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .llm-option.active {
+      border-color: var(--green);
+      background: var(--gray-50);
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .guard-note {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: var(--gray-50);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .chat-main {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 72vh;
+      overflow: hidden;
+    }
+
+    .chat-main-header {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .chat-main-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .chat-main-sub {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .chat-messages {
+      padding: 20px;
+      overflow-y: auto;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      background: var(--white);
+    }
+
+    .chat-msg {
+      display: inline-block;
+      width: auto;
+      height: fit-content;
+      max-width: min(80%, 720px);
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .chat-msg.user {
+      justify-self: end;
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .chat-msg.bot {
+      justify-self: start;
+      background: var(--gray-100);
+      color: var(--text-primary);
+    }
+
+    .chat-msg.bot.blocked {
+      border: 1px solid #e7bcbc;
+      background: #fff4f4;
+      color: #6e1f1f;
+    }
+
+    .chat-input-wrap {
+      border-top: 1px solid var(--border);
+      padding: 14px;
+      background: var(--white);
+    }
+
+    .chat-form {
+      display: block;
+    }
+
+    .chat-input-shell {
+      position: relative;
+    }
+
+    .chat-input {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 84px 12px 46px;
+      font-size: 0.9375rem;
+      color: var(--text-primary);
+      background: var(--white);
+      min-height: 48px;
+      max-height: 160px;
+      resize: none;
+      line-height: 1.45;
+    }
+
+    .chat-input:focus {
+      border-color: var(--green);
+      outline: none;
+    }
+
+    .chat-input:disabled {
+      background: var(--gray-50);
+      color: var(--text-muted);
+    }
+
+    .chat-input-attach {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      color: var(--text-primary);
+      background: var(--gray-100);
+      transition: background var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .chat-input-attach:hover {
+      background: var(--gray-200);
+      color: var(--green);
+    }
+
+    .chat-input-attach:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .chat-input-send {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      color: var(--white);
+      background: var(--green);
+      transition: background var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .chat-input-send:hover {
+      background: var(--green-800);
+    }
+
+    .chat-input-send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 1024px) {
+      .chat-demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-main {
+        min-height: 68vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="chat-demo-wrap">
+    <div class="container">
+      <div class="chat-demo-grid">
+        <aside class="chat-side reveal">
+          <div>
+            <span class="eyebrow">Demo Workspace</span>
+            <h2>Full-page AI chat</h2>
+            <p>Select an LLM, then start a governed chat session.</p>
+          </div>
+
+          <div>
+            <div class="chip">Model Selection</div>
+            <div class="llm-options" id="llm-options" style="margin-top: 12px;">
+              <button type="button" class="llm-option" data-llm="ChatGPT">ChatGPT</button>
+              <button type="button" class="llm-option" data-llm="Gemini">Gemini</button>
+              <button type="button" class="llm-option" data-llm="Claude">Claude</button>
+            </div>
+          </div>
+
+          <div class="guard-note">
+            Messages containing sensitive data are blocked before reaching the model.
+          </div>
+        </aside>
+
+        <section class="chat-main reveal reveal-delay-1" aria-label="AI chat demo">
+          <div class="chat-main-header">
+            <div>
+              <div class="chat-main-title">Prunex AI Chat Demo</div>
+              <div class="chat-main-sub" id="chat-status">Choose a model to begin</div>
+            </div>
+            <button type="button" class="btn text-sm" id="clear-chat">Clear chat</button>
+          </div>
+
+          <div class="chat-messages" id="chat-messages"></div>
+
+          <div class="chat-input-wrap">
+            <form class="chat-form" id="chat-form">
+              <div class="chat-input-shell">
+                <input id="chat-file-input" type="file" hidden>
+                <textarea
+                  id="chat-input"
+                  class="chat-input"
+                  placeholder="Select a model first..."
+                  autocomplete="off"
+                  rows="1"
+                  disabled
+                ></textarea>
+                <button type="button" class="chat-input-attach" id="chat-attach" aria-label="Attach file" disabled>
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path fill="currentColor" d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z"></path>
+                  </svg>
+                </button>
+                <button type="submit" class="chat-input-send" id="chat-send" aria-label="Send message" disabled>
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path fill="currentColor" d="M4 12h12.17l-4.58 4.59L13 18l7-7-7-7-1.41 1.41L16.17 10H4z"></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+  <div id="site-cookie-banner"></div>
+
+  <script src="../resources/js/components.js"></script>
+  <script src="../resources/js/main.js"></script>
+  <script>
+    (function () {
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+      const chatSend = document.getElementById('chat-send');
+      const chatAttach = document.getElementById('chat-attach');
+      const chatFileInput = document.getElementById('chat-file-input');
+      const chatMessages = document.getElementById('chat-messages');
+      const llmOptionsWrap = document.getElementById('llm-options');
+      const llmButtons = llmOptionsWrap ? llmOptionsWrap.querySelectorAll('.llm-option') : [];
+      const chatStatus = document.getElementById('chat-status');
+      const clearChat = document.getElementById('clear-chat');
+
+      if (!chatForm || !chatInput || !chatSend || !chatAttach || !chatFileInput || !chatMessages || !llmOptionsWrap || !chatStatus || !clearChat) return;
+
+      const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+      const phoneRegex = /(?:\+?\d[\d\s().-]{7,}\d)/;
+      let selectedLlm = null;
+
+      const addMessage = (text, type, blocked) => {
+        const msg = document.createElement('div');
+        msg.className = `chat-msg ${type}${blocked ? ' blocked' : ''}`;
+        msg.textContent = text;
+        chatMessages.appendChild(msg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      };
+
+      const addIntro = () => {
+        addMessage('Welcome. Choose ChatGPT, Gemini, or Claude from the left to start.', 'bot');
+      };
+
+      const setChatEnabled = (enabled) => {
+        chatInput.disabled = !enabled;
+        chatSend.disabled = !enabled;
+        chatAttach.disabled = !enabled;
+        chatInput.placeholder = enabled ? `Message ${selectedLlm}...` : 'Select a model first...';
+      };
+
+      const autoResizeInput = () => {
+        chatInput.style.height = 'auto';
+        chatInput.style.height = `${Math.min(chatInput.scrollHeight, 160)}px`;
+      };
+
+      const hasSensitiveData = (message) => {
+        if (emailRegex.test(message)) return true;
+        const phoneMatch = message.match(phoneRegex);
+        if (!phoneMatch) return false;
+        return phoneMatch[0].replace(/\D/g, '').length >= 8;
+      };
+
+      const getReply = (message) => {
+        const input = message.toLowerCase();
+        if (input.includes('pricing') || input.includes('price')) {
+          return `[${selectedLlm}] Pricing depends on scope and controls. Use Contact for a tailored plan.`;
+        }
+        if (input.includes('compliance') || input.includes('gdpr') || input.includes('hipaa') || input.includes('eu ai act')) {
+          return `[${selectedLlm}] Prunex maps controls to EU AI Act, GDPR, HIPAA, NIST AI RMF, and ISO 42001.`;
+        }
+        if (input.includes('demo')) {
+          return `[${selectedLlm}] You can request a personalized demo from the Contact page.`;
+        }
+        return `[${selectedLlm}] Message received. This is a demo response path for the full-page chat experience.`;
+      };
+
+      llmButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          selectedLlm = button.getAttribute('data-llm');
+          llmButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
+          chatStatus.textContent = `Using ${selectedLlm}`;
+          setChatEnabled(true);
+          addMessage(`Model selected: ${selectedLlm}. You can start chatting.`, 'bot');
+          chatInput.focus();
+        });
+      });
+
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!selectedLlm) {
+          addMessage('Select a model first to start.', 'bot');
+          return;
+        }
+        if (!message) return;
+
+        addMessage(message, 'user');
+        chatInput.value = '';
+        autoResizeInput();
+
+        if (hasSensitiveData(message)) {
+          addMessage('Blocked: this message contains sensitive data (email or phone number). Remove it and try again.', 'bot', true);
+          return;
+        }
+
+        setTimeout(() => addMessage(getReply(message), 'bot'), 300);
+      });
+
+      chatInput.addEventListener('input', autoResizeInput);
+
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          chatForm.requestSubmit();
+        }
+      });
+
+      chatAttach.addEventListener('click', () => {
+        if (chatAttach.disabled) return;
+        chatFileInput.click();
+      });
+
+      chatFileInput.addEventListener('change', () => {
+        const file = chatFileInput.files && chatFileInput.files[0];
+        if (!file) return;
+        addMessage(`Attachment selected: ${file.name}`, 'user');
+        addMessage('File received in demo mode. Connect backend storage to process attachments.', 'bot');
+        chatFileInput.value = '';
+      });
+
+      clearChat.addEventListener('click', () => {
+        chatMessages.innerHTML = '';
+        addIntro();
+      });
+
+      setChatEnabled(false);
+      autoResizeInput();
+      addIntro();
+    })();
+  </script>
+</body>
+</html>
