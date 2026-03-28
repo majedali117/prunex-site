@@ -158,6 +158,139 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Main page chat widget ---
+  const chatWidget = document.getElementById('chat-widget');
+  const chatToggle = document.getElementById('chat-toggle');
+  const chatPanel = document.getElementById('chat-panel');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+  const chatSend = document.getElementById('chat-send');
+  const chatMessages = document.getElementById('chat-messages');
+
+  if (chatWidget && chatToggle && chatPanel && chatForm && chatInput && chatSend && chatMessages) {
+    let selectedLlm = null;
+    const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    const phoneRegex = /(?:\+?\d[\d\s().-]{7,}\d)/;
+
+    const addMessage = (text, type) => {
+      const message = document.createElement('div');
+      message.className = `chat-msg ${type}`;
+      message.textContent = text;
+      chatMessages.appendChild(message);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    const setChatEnabled = (enabled) => {
+      chatInput.disabled = !enabled;
+      chatSend.disabled = !enabled;
+      chatInput.placeholder = enabled ? `Ask your question (${selectedLlm})...` : 'Choose an LLM to start...';
+    };
+
+    const addLlmSelector = () => {
+      addMessage('Before we start, choose which LLM you want to use.', 'bot');
+      const optionsWrap = document.createElement('div');
+      optionsWrap.className = 'chat-llm-options';
+
+      ['ChatGPT', 'Gemini', 'Claude'].forEach((llm) => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'chat-llm-option';
+        option.textContent = llm;
+        option.addEventListener('click', () => {
+          if (selectedLlm) return;
+          selectedLlm = llm;
+          option.classList.add('selected');
+          optionsWrap.querySelectorAll('.chat-llm-option').forEach((btn) => {
+            btn.disabled = true;
+            if (!btn.classList.contains('selected')) btn.style.opacity = '0.6';
+          });
+          addMessage(`Selected LLM: ${selectedLlm}`, 'user');
+          addMessage(`Great, you're now chatting with ${selectedLlm}. What would you like to know?`, 'bot');
+          setChatEnabled(true);
+          if (chatWidget.classList.contains('open')) chatInput.focus();
+        });
+        optionsWrap.appendChild(option);
+      });
+
+      chatMessages.appendChild(optionsWrap);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    const getReply = (message) => {
+      const input = message.toLowerCase();
+      if (input.includes('price') || input.includes('pricing')) {
+        return `[${selectedLlm}] Our pricing depends on deployment scope. Share your use case on the Contact page and we will provide the right plan.`;
+      }
+      if (input.includes('demo')) {
+        return `[${selectedLlm}] You can request a personalized demo from our Contact page. We usually respond within one business day.`;
+      }
+      if (input.includes('compliance') || input.includes('gdpr') || input.includes('hipaa') || input.includes('eu ai act')) {
+        return `[${selectedLlm}] Prunex supports governance controls aligned to frameworks like GDPR, HIPAA, EU AI Act, NIST AI RMF, and ISO 42001.`;
+      }
+      return `[${selectedLlm}] Thanks for your message. For a detailed response, please use the Contact page and our team will follow up.`;
+    };
+
+    const hasSensitiveData = (message) => {
+      if (emailRegex.test(message)) return true;
+
+      const phoneMatch = message.match(phoneRegex);
+      if (!phoneMatch) return false;
+
+      // Require at least 8 digits to reduce false positives.
+      const digitsOnly = phoneMatch[0].replace(/\D/g, '');
+      return digitsOnly.length >= 8;
+    };
+
+    const setOpen = (isOpen) => {
+      chatWidget.classList.toggle('open', isOpen);
+      chatToggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen && !chatInput.disabled) chatInput.focus();
+    };
+
+    setChatEnabled(false);
+    addLlmSelector();
+
+    chatToggle.addEventListener('click', () => {
+      const isOpen = chatWidget.classList.contains('open');
+      setOpen(!isOpen);
+    });
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!selectedLlm) {
+        addMessage('Please choose an LLM option first.', 'bot');
+        return;
+      }
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      addMessage(message, 'user');
+      chatInput.value = '';
+
+      if (hasSensitiveData(message)) {
+        addMessage('I cannot process messages containing sensitive information such as email addresses or phone numbers. Please remove them and try again.', 'bot');
+        return;
+      }
+
+      setTimeout(() => {
+        addMessage(getReply(message), 'bot');
+      }, 350);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!chatWidget.classList.contains('open')) return;
+      if (!chatWidget.contains(event.target)) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    });
+  }
+
   // Listen for components loaded event (fired by components.js)
   document.addEventListener('componentsLoaded', initDynamicComponents);
 });
