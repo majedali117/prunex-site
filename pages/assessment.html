@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free AI compliance readiness assessment. Score your organisation across 13 regulatory frameworks including EU AI Act, GDPR, HIPAA, and ISO 42001 in under 10 minutes.">
+  <title>Compliance Readiness Assessment - Prunex</title>
+  <meta property="og:title" content="Compliance Readiness Assessment - Prunex">
+  <meta property="og:description" content="How ready is your organisation for AI and data compliance? Get a personalised readiness score across 13 regulatory frameworks.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../resources/css/styles.css">
+  <style>
+    /* ===================================================================
+       Assessment Tool — Page-Specific Styles
+       =================================================================== */
+
+    /* --- Phase Containers --- */
+    .assessment-phase {
+      display: none;
+      animation: assessFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .assessment-phase.active {
+      display: block;
+    }
+
+    @keyframes assessFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Loading / Error States --- */
+    .assess-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      gap: 16px;
+    }
+
+    .assess-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--green-700);
+      border-radius: 50%;
+      animation: assessSpin 0.8s linear infinite;
+    }
+
+    @keyframes assessSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .assess-error {
+      text-align: center;
+      padding: 80px 24px;
+    }
+
+    .assess-error h2 { color: #dc2626; margin-bottom: 12px; }
+
+    /* --- Resume Banner --- */
+    .resume-banner {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .resume-banner-text h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .resume-banner-text p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .resume-banner-actions {
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .resume-banner { flex-direction: column; align-items: stretch; }
+      .resume-banner-actions { justify-content: stretch; }
+      .resume-banner-actions .btn { flex: 1; text-align: center; }
+    }
+
+    /* --- Phase 1: Landing --- */
+    .assess-hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+
+    .assess-hero h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .assess-hero .subtitle {
+      font-size: clamp(1rem, 2vw, 1.125rem);
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    .assess-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .assess-stat {
+      text-align: center;
+    }
+
+    .assess-stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .assess-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .assess-disclaimer {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      max-width: 600px;
+      margin: 24px auto 0;
+      line-height: 1.5;
+    }
+
+    /* --- Phase 2: Intake --- */
+    .intake-card {
+      max-width: 560px;
+      margin: 60px auto;
+      text-align: center;
+    }
+
+    .intake-step-indicator {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .intake-card h2 {
+      font-size: 1.375rem;
+      margin-bottom: 32px;
+    }
+
+    .intake-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .intake-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+      text-align: left;
+      font-size: 0.9375rem;
+      background: var(--white);
+    }
+
+    .intake-option:hover {
+      border-color: var(--gray-400);
+      background: var(--gray-50);
+    }
+
+    .intake-option.selected {
+      border-color: var(--green-700);
+      background: var(--gray-50);
+    }
+
+    .intake-option-radio {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--gray-300);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .intake-option.selected .intake-option-radio {
+      border-color: var(--green-700);
+    }
+
+    .intake-option.selected .intake-option-radio::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 8px;
+      height: 8px;
+      background: var(--green-700);
+      border-radius: 50%;
+    }
+
+    .intake-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    /* --- Phase 3: Framework Selection --- */
+    .fw-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .fw-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+      position: relative;
+    }
+
+    .fw-card:hover {
+      border-color: var(--gray-400);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .fw-card.selected {
+      border-color: var(--green-700);
+      background: var(--gray-50);
+    }
+
+    .fw-card.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .fw-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .fw-card-name {
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+
+    .fw-card-check {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .fw-card.selected .fw-card-check {
+      background: var(--green-700);
+      border-color: var(--green-700);
+      color: white;
+    }
+
+    .fw-card-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .fw-card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .fw-tag {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: var(--gray-100);
+      color: var(--text-secondary);
+    }
+
+    .fw-tag-recommended {
+      background: var(--green-700);
+      color: white;
+    }
+
+    .fw-card-urgency {
+      font-size: 0.75rem;
+      color: #d97706;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .fw-card-penalty {
+      font-size: 0.6875rem;
+      color: var(--gray-400);
+    }
+
+    .fw-helper {
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    .fw-selection-count {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .fw-actions {
+      text-align: center;
+      margin-top: 24px;
+      padding-bottom: 80px;
+    }
+
+    /* --- Phase 4: Classification Gate --- */
+    .classify-card {
+      max-width: 640px;
+      margin: 40px auto;
+    }
+
+    .classify-step {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .classify-card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .classify-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .classify-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .classify-option:hover {
+      border-color: var(--gray-400);
+    }
+
+    .classify-option.selected {
+      border-color: var(--green-700);
+      background: var(--gray-50);
+    }
+
+    .classify-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .classify-option.selected .classify-checkbox {
+      background: var(--green-700);
+      border-color: var(--green-700);
+    }
+
+    .classify-option.selected .classify-checkbox::after {
+      content: '✓';
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 700;
+    }
+
+    .classify-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+    }
+
+    /* --- Phase 5: Questions --- */
+    .questions-progress {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+
+    .questions-progress-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .progress-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    .progress-category {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      min-width: 120px;
+      max-width: 300px;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--green-700);
+      border-radius: 2px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .question-category-header {
+      padding: 40px 0 24px;
+    }
+
+    .question-category-header .eyebrow {
+      margin-bottom: 8px;
+    }
+
+    .question-category-header h2 {
+      font-size: 1.375rem;
+    }
+
+    .question-block {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 16px;
+      transition: border-color var(--transition);
+    }
+
+    .question-block.answered {
+      border-color: var(--gray-300);
+    }
+
+    .question-block.skipped {
+      opacity: 0.5;
+      background: var(--gray-50);
+    }
+
+    .question-text {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .question-ref {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .question-skipped-msg {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding: 16px;
+      background: var(--gray-50);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .maturity-options {
+      display: flex;
+      gap: 8px;
+    }
+
+    .maturity-option {
+      flex: 1;
+      padding: 12px 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-fast);
+      min-height: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .maturity-option:hover {
+      border-color: var(--gray-400);
+      background: var(--gray-50);
+    }
+
+    .maturity-option.selected {
+      border-color: var(--green-700);
+      background: var(--gray-50);
+    }
+
+    .maturity-score {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .maturity-label {
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .maturity-options { flex-direction: column; }
+      .maturity-option { flex-direction: row; gap: 12px; min-height: auto; padding: 14px 16px; }
+      .maturity-label { text-align: left; }
+    }
+
+    .question-rationale {
+      margin-top: 12px;
+    }
+
+    .rationale-toggle {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: none;
+      background: none;
+      padding: 4px 0;
+      transition: color var(--transition-fast);
+    }
+
+    .rationale-toggle:hover { color: var(--text-primary); }
+
+    .rationale-content {
+      display: none;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      padding: 12px 16px;
+      background: var(--gray-50);
+      border-radius: var(--radius);
+      line-height: 1.6;
+    }
+
+    .rationale-content.open { display: block; }
+
+    .question-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 32px 0 60px;
+    }
+
+    /* --- Phase 6: Lead Capture --- */
+    .lead-capture {
+      max-width: 480px;
+      margin: 60px auto;
+    }
+
+    .lead-capture h2 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .lead-capture .subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .lead-form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .lead-field label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .lead-field label .required { color: #dc2626; }
+
+    .lead-field input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9375rem;
+      font-family: var(--font-family);
+      transition: border-color var(--transition-fast);
+      background: var(--white);
+    }
+
+    .lead-field input:focus {
+      outline: none;
+      border-color: var(--green-700);
+    }
+
+    .lead-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      cursor: pointer;
+    }
+
+    .lead-checkbox input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--green-700);
+    }
+
+    .lead-error {
+      font-size: 0.75rem;
+      color: #dc2626;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .lead-error.show { display: block; }
+
+    /* --- Phase 7: Results --- */
+    .results-hero {
+      text-align: center;
+      padding: 60px 0 40px;
+    }
+
+    .results-score-ring {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .results-score-ring svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .results-score-ring circle {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+
+    .score-bg { stroke: var(--gray-200); }
+
+    .score-fill {
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .results-score-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .results-maturity-badge {
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 99px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .results-eu-section {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin: 32px auto;
+      max-width: 600px;
+    }
+
+    .risk-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .countdown-text {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .countdown-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .penalty-text {
+      font-size: 0.8125rem;
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    /* Per-framework result cards */
+    .fw-result-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+      border-top: 4px solid var(--green-700);
+    }
+
+    .fw-result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .fw-result-header h3 {
+      font-size: 1.25rem;
+    }
+
+    .fw-result-score {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .fw-result-maturity {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 99px;
+      color: white;
+    }
+
+    .fw-radar-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 24px;
+    }
+
+    .fw-radar-container svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .fw-gaps {
+      margin-top: 24px;
+    }
+
+    .fw-gaps h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .gap-item {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .gap-text {
+      font-size: 0.875rem;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .gap-ref {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .results-cta {
+      text-align: center;
+      padding: 40px 0 20px;
+    }
+
+    .results-cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .results-disclaimer {
+      font-size: 0.6875rem;
+      color: var(--gray-400);
+      max-width: 600px;
+      margin: 32px auto 0;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* --- Utility: Button secondary ghost --- */
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-family: var(--font-family);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-ghost:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-400);
+    }
+
+    /* --- Print Styles --- */
+    @media print {
+      .header, .footer, .cookie-banner,
+      .questions-progress, .results-cta-buttons,
+      .btn-ghost, .btn { display: none !important; }
+      .assessment-phase { page-break-inside: avoid; }
+      .fw-result-card { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <!-- Loading state -->
+    <div class="assess-loading" id="assess-loading">
+      <div class="assess-spinner"></div>
+      <p style="color: var(--text-muted); font-size: 0.875rem;">Loading assessment...</p>
+    </div>
+
+    <!-- Error state -->
+    <div class="assess-error" id="assess-error" style="display: none;">
+      <h2>Unable to load assessment</h2>
+      <p>Please refresh the page or try again later.</p>
+      <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+    </div>
+
+    <!-- ============================================================
+         PHASE 1 — Landing
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-1">
+      <div class="container">
+        <div id="resume-banner"></div>
+        <div class="assess-hero">
+          <h1>How ready is your organisation for AI and data compliance?</h1>
+          <p class="subtitle">Get a personalised readiness score across 13 regulatory frameworks in under 10 minutes.</p>
+          <div class="assess-stats">
+            <div class="assess-stat">
+              <div class="assess-stat-value">13</div>
+              <div class="assess-stat-label">Frameworks</div>
+            </div>
+            <div class="assess-stat">
+              <div class="assess-stat-value">213</div>
+              <div class="assess-stat-label">Questions</div>
+            </div>
+            <div class="assess-stat">
+              <div class="assess-stat-value">~10 min</div>
+              <div class="assess-stat-label">To Complete</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg" id="btn-start-assessment">Start Assessment</button>
+          <p class="assess-disclaimer">This assessment is indicative only and does not constitute legal advice or compliance certification.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHASE 2 — Intake
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-2">
+      <div class="container">
+        <div class="intake-card" id="intake-container"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHASE 3 — Framework Selection
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-3">
+      <div class="container">
+        <div class="section-header-center">
+          <span class="eyebrow">Select Frameworks</span>
+          <h2>Which frameworks are relevant to your organisation?</h2>
+          <p>Based on your profile, we've highlighted recommended frameworks. Select up to 3.</p>
+        </div>
+        <div id="fw-grid-container"></div>
+        <p class="fw-helper">
+          <span id="fw-count" class="fw-selection-count">0</span> of 3 selected
+        </p>
+        <div class="fw-actions">
+          <button class="btn btn-ghost" id="btn-fw-back">Back</button>
+          <button class="btn btn-primary" id="btn-fw-next" disabled>Begin Assessment</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHASE 4 — EU AI Act Classification Gate
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-4">
+      <div class="container">
+        <div class="classify-card" id="classify-container"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHASE 5 — Scored Questions
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-5">
+      <div class="questions-progress" id="questions-progress">
+        <div class="questions-progress-inner">
+          <div class="progress-info">
+            <button class="btn-ghost" id="btn-q-back" style="padding: 6px 12px; font-size: 0.75rem;">← Back</button>
+            <span class="progress-category" id="progress-category"></span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <div class="progress-info">
+            <span id="progress-count"></span>
+            <span class="progress-time" id="progress-time"></span>
+          </div>
+        </div>
+      </div>
+      <div class="container" id="questions-container"></div>
+      <div class="container">
+        <div class="question-nav">
+          <button class="btn btn-ghost" id="btn-q-prev">← Previous</button>
+          <button class="btn btn-primary" id="btn-q-next">Next →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHASE 6 — Lead Capture
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-6">
+      <div class="container">
+        <div class="lead-capture">
+          <h2>You're almost there</h2>
+          <p class="subtitle">Enter your details to view your personalised compliance readiness report.</p>
+          <form class="lead-form" id="lead-form" novalidate>
+            <div class="lead-field">
+              <label for="lead-name">Full Name <span class="required">*</span></label>
+              <input type="text" id="lead-name" placeholder="Your full name" required>
+            </div>
+            <div class="lead-field">
+              <label for="lead-email">Work Email <span class="required">*</span></label>
+              <input type="email" id="lead-email" placeholder="you@company.com" required>
+            </div>
+            <div class="lead-field">
+              <label for="lead-company">Company Name <span class="required">*</span></label>
+              <input type="text" id="lead-company" placeholder="Company name" required>
+            </div>
+            <div class="lead-field">
+              <label for="lead-role">Job Title / Role <span class="required">*</span></label>
+              <input type="text" id="lead-role" placeholder="Your role" required>
+            </div>
+            <label class="lead-checkbox">
+              <input type="checkbox" id="lead-consent" required>
+              I agree to Prunex's <a href="privacy.html">Privacy Policy</a> and consent to being contacted about my assessment results.
+            </label>
+            <label class="lead-checkbox">
+              <input type="checkbox" id="lead-marketing">
+              I'd like to receive AI governance insights and updates from Prunex.
+            </label>
+            <p class="lead-error" id="lead-error-msg">Please complete all required fields and accept the privacy policy.</p>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">View My Results</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHASE 7 — Results Dashboard
+         ============================================================ -->
+    <section class="assessment-phase" id="phase-7">
+      <div class="container" id="results-container"></div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <div id="site-cookie-banner"></div>
+
+  <script src="../resources/js/components.js"></script>
+  <script src="../resources/js/scoring.js"></script>
+  <script src="../resources/js/assessment.js"></script>
+  <script src="../resources/js/main.js"></script>
+</body>
+</html>
