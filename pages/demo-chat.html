@@ -341,7 +341,7 @@
   <script src="../resources/js/main.js"></script>
   <script>
     (function () {
-      const COMPLIANCE_GATEWAY_URL = 'http://127.0.0.1:8000/v1/llm/completions';
+      const COMPLIANCE_GATEWAY_URL = 'https://majedali-hf-prunex.hf.space/v1/llm/completions';
 
       const chatForm = document.getElementById('chat-form');
       const chatInput = document.getElementById('chat-input');
@@ -393,7 +393,7 @@
       const setBusy = (busy) => {
         isSending = busy;
         setChatEnabled(Boolean(selectedLlm));
-        chatStatus.textContent = busy ? `Using ${selectedLlm} • Sending to localhost gateway...` : `Using ${selectedLlm}`;
+        chatStatus.textContent = busy ? `Using ${selectedLlm} • Sending to deployed gateway...` : `Using ${selectedLlm}`;
       };
 
       const cleanResponse = (value) => {
@@ -410,7 +410,7 @@
           body: JSON.stringify({
             prompt,
             user_id: userId,
-            response_mode: 'llm',
+            response_mode: 'prompt_only',
             input_mode: 'enforce'
           })
         });
