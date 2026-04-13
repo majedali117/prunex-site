@@ -102,6 +102,8 @@
       grid-template-rows: auto 1fr auto;
       min-height: 72vh;
       overflow: hidden;
+      height: 72vh;
+      min-height: 0;
     }
 
     .chat-main-header {
@@ -130,6 +132,7 @@
       gap: 12px;
       align-content: start;
       background: var(--white);
+      min-height: 0;
     }
 
     .chat-msg {
@@ -342,6 +345,8 @@
   <script src="../resources/js/main.js"></script>
   <script>
     (function () {
+      const COMPLIANCE_GATEWAY_URL = 'https://majedali-hf-prunex.hf.space/v1/llm/completions';
+
       const chatForm = document.getElementById('chat-form');
       const chatInput = document.getElementById('chat-input');
       const chatSend = document.getElementById('chat-send');
@@ -356,10 +361,9 @@
       if (!chatForm || !chatInput || !chatSend || !chatAttach || !chatFileInput || !chatMessages || !llmOptionsWrap || !chatStatus || !clearChat) return;
 
       const t = (key) => window.i18n ? window.i18n.t(key) : key;
-
-      const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
-      const phoneRegex = /(?:\+?\d[\d\s().-]{7,}\d)/;
       let selectedLlm = null;
+      let isSending = false;
+      let runtimeSessionId = createRuntimeSessionId();
 
       const addMessage = (text, type, blocked) => {
         const msg = document.createElement('div');
@@ -369,14 +373,20 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
       };
 
+      function createRuntimeSessionId() {
+        const seed = `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+        return (seed + 'ollamachatsessionseedvalue').slice(0, 48);
+      }
+
       const addIntro = () => {
         addMessage(t('demo.welcome_msg'), 'bot');
       };
 
       const setChatEnabled = (enabled) => {
-        chatInput.disabled = !enabled;
-        chatSend.disabled = !enabled;
-        chatAttach.disabled = !enabled;
+        const interactive = enabled && !isSending;
+        chatInput.disabled = !interactive;
+        chatSend.disabled = !interactive;
+        chatAttach.disabled = !interactive;
         chatInput.placeholder = enabled ? `${t('demo.placeholder_active')} ${selectedLlm}...` : t('demo.placeholder_default');
       };
 
@@ -385,25 +395,46 @@
         chatInput.style.height = `${Math.min(chatInput.scrollHeight, 160)}px`;
       };
 
-      const hasSensitiveData = (message) => {
-        if (emailRegex.test(message)) return true;
-        const phoneMatch = message.match(phoneRegex);
-        if (!phoneMatch) return false;
-        return phoneMatch[0].replace(/\D/g, '').length >= 8;
+      const setBusy = (busy) => {
+        isSending = busy;
+        setChatEnabled(Boolean(selectedLlm));
+        chatStatus.textContent = busy ? `Using ${selectedLlm} • Sending to deployed gateway...` : `Using ${selectedLlm}`;
       };
 
-      const getReply = (message) => {
-        const input = message.toLowerCase();
-        if (input.includes('pricing') || input.includes('price') || input.includes('preis')) {
-          return `[${selectedLlm}] ${t('demo.reply_pricing')}`;
+      const cleanResponse = (value) => {
+        const asString = typeof value === 'string' ? value : JSON.stringify(value);
+        let cleanText = asString.replace(/<thinking>.*?<\/thinking>/gs, '');
+        cleanText = cleanText.replace(/<invocation>.*?<\/invocation>/gs, '');
+        return cleanText.trim();
+      };
+
+      const precheckCompliance = async (prompt, userId) => {
+        const response = await fetch(COMPLIANCE_GATEWAY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt,
+            user_id: userId,
+            response_mode: 'llm',
+            input_mode: 'enforce'
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Compliance gateway error: ${response.status} ${errorText}`);
         }
-        if (input.includes('compliance') || input.includes('gdpr') || input.includes('dsgvo') || input.includes('hipaa') || input.includes('eu ai act')) {
-          return `[${selectedLlm}] ${t('demo.reply_compliance')}`;
-        }
-        if (input.includes('demo')) {
-          return `[${selectedLlm}] ${t('demo.reply_demo')}`;
-        }
-        return `[${selectedLlm}] ${t('demo.reply_default')}`;
+
+        return response.json();
+      };
+
+      const sendMessage = async (prompt, sessionId) => {
+        const gatewayResponse = await precheckCompliance(prompt, sessionId);
+
+        return {
+          blocked: gatewayResponse.status !== 'ALLOWED',
+          message: cleanResponse(gatewayResponse.content || 'No response received from compliance gateway.')
+        };
       };
 
       llmButtons.forEach((button) => {
@@ -417,7 +448,7 @@
         });
       });
 
-      chatForm.addEventListener('submit', (e) => {
+      chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const message = chatInput.value.trim();
         if (!selectedLlm) {
@@ -430,12 +461,18 @@
         chatInput.value = '';
         autoResizeInput();
 
-        if (hasSensitiveData(message)) {
-          addMessage(t('demo.blocked_msg'), 'bot', true);
-          return;
-        }
+        setBusy(true);
 
-        setTimeout(() => addMessage(getReply(message), 'bot'), 300);
+        try {
+          const result = await sendMessage(message, runtimeSessionId);
+          addMessage(result.message || 'No response received.', 'bot', result.blocked);
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Unexpected error while sending chat message.';
+          addMessage(errorMessage, 'bot', true);
+        } finally {
+          setBusy(false);
+          chatInput.focus();
+        }
       });
 
       chatInput.addEventListener('input', autoResizeInput);
@@ -462,6 +499,7 @@
 
       clearChat.addEventListener('click', () => {
         chatMessages.innerHTML = '';
+        runtimeSessionId = createRuntimeSessionId();
         addIntro();
       });
 
