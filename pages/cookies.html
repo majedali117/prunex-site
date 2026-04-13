@@ -15,8 +15,8 @@
   <main>
     <section class="section">
       <div class="legal-content">
-        <span class="eyebrow">Legal</span>
-        <h1>Cookie Policy</h1>
+        <span class="eyebrow" data-i18n="cookies.eyebrow">Legal</span>
+        <h1 data-i18n="cookies.title">Cookie Policy</h1>
         <p class="last-updated">Last updated: 7 March 2026</p>
 
         <p>This Cookie Policy explains how Prunex ("we", "our", or "us") uses cookies and similar technologies on our website. It describes what cookies are, what types we use, and how you can manage your preferences.</p>
@@ -75,7 +75,7 @@
         <div style="margin-top: 32px;">
           <div class="cookie-toggle">
             <div class="cookie-toggle-info">
-              <h4>Essential Cookies</h4>
+              <h4 data-i18n="cookies.essential_title">Essential Cookies</h4>
               <p>Required for core website functionality. Always active.</p>
             </div>
             <label class="toggle-switch">
@@ -86,7 +86,7 @@
 
           <div class="cookie-toggle">
             <div class="cookie-toggle-info">
-              <h4>Analytical Cookies</h4>
+              <h4 data-i18n="cookies.analytics_title">Analytical Cookies</h4>
               <p>Help us understand how visitors use our website to improve the experience.</p>
             </div>
             <label class="toggle-switch">
@@ -97,7 +97,7 @@
 
           <div class="cookie-toggle">
             <div class="cookie-toggle-info">
-              <h4>Marketing Cookies</h4>
+              <h4 data-i18n="cookies.marketing_title">Marketing Cookies</h4>
               <p>Used to deliver relevant advertisements and track campaign performance.</p>
             </div>
             <label class="toggle-switch">
@@ -107,7 +107,7 @@
           </div>
 
           <div style="margin-top: 24px;">
-            <button class="btn btn-primary" id="save-cookie-prefs">Save Preferences</button>
+            <button class="btn btn-primary" id="save-cookie-prefs" data-i18n="cookies.save_prefs">Save Preferences</button>
           </div>
         </div>
       </div>
@@ -117,6 +117,7 @@
   <div id="site-cookie-banner"></div>
 
   <script src="../resources/js/components.js"></script>
+  <script src="../resources/js/i18n.js"></script>
   <script src="../resources/js/main.js"></script>
 </body>
 </html>

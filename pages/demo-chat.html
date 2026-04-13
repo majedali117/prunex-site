@@ -277,13 +277,13 @@
       <div class="chat-demo-grid">
         <aside class="chat-side reveal">
           <div>
-            <span class="eyebrow">Demo Workspace</span>
-            <h2>Full-page AI chat</h2>
-            <p>Select an LLM, then start a governed chat session.</p>
+            <span class="eyebrow" data-i18n="demo.sidebar_eyebrow">Demo Workspace</span>
+            <h2 data-i18n="demo.sidebar_title">Full-page AI chat</h2>
+            <p data-i18n="demo.sidebar_desc">Select an LLM, then start a governed chat session.</p>
           </div>
 
           <div>
-            <div class="chip">Model Selection</div>
+            <div class="chip" data-i18n="demo.model_selection">Model Selection</div>
             <div class="llm-options" id="llm-options" style="margin-top: 12px;">
               <button type="button" class="llm-option" data-llm="ChatGPT">ChatGPT</button>
               <button type="button" class="llm-option" data-llm="Gemini">Gemini</button>
@@ -291,7 +291,7 @@
             </div>
           </div>
 
-          <div class="guard-note">
+          <div class="guard-note" data-i18n="demo.guard_note">
             Messages containing sensitive data are blocked before reaching the model.
           </div>
         </aside>
@@ -299,10 +299,10 @@
         <section class="chat-main reveal reveal-delay-1" aria-label="AI chat demo">
           <div class="chat-main-header">
             <div>
-              <div class="chat-main-title">Prunex AI Chat Demo</div>
-              <div class="chat-main-sub" id="chat-status">Choose a model to begin</div>
+              <div class="chat-main-title" data-i18n="demo.chat_title">Prunex AI Chat Demo</div>
+              <div class="chat-main-sub" id="chat-status" data-i18n="demo.chat_status_default">Choose a model to begin</div>
             </div>
-            <button type="button" class="btn text-sm" id="clear-chat">Clear chat</button>
+            <button type="button" class="btn text-sm" id="clear-chat" data-i18n="demo.clear_chat">Clear chat</button>
           </div>
 
           <div class="chat-messages" id="chat-messages"></div>
@@ -341,6 +341,7 @@
   <div id="site-cookie-banner"></div>
 
   <script src="../resources/js/components.js"></script>
+  <script src="../resources/js/i18n.js"></script>
   <script src="../resources/js/main.js"></script>
   <script>
     (function () {
@@ -359,6 +360,7 @@
 
       if (!chatForm || !chatInput || !chatSend || !chatAttach || !chatFileInput || !chatMessages || !llmOptionsWrap || !chatStatus || !clearChat) return;
 
+      const t = (key) => window.i18n ? window.i18n.t(key) : key;
       let selectedLlm = null;
       let isSending = false;
       let runtimeSessionId = createRuntimeSessionId();
@@ -377,7 +379,7 @@
       }
 
       const addIntro = () => {
-        addMessage('Welcome. Choose ChatGPT, Gemini, or Claude from the left to start.', 'bot');
+        addMessage(t('demo.welcome_msg'), 'bot');
       };
 
       const setChatEnabled = (enabled) => {
@@ -385,7 +387,7 @@
         chatInput.disabled = !interactive;
         chatSend.disabled = !interactive;
         chatAttach.disabled = !interactive;
-        chatInput.placeholder = enabled ? `Message ${selectedLlm}...` : 'Select a model first...';
+        chatInput.placeholder = enabled ? `${t('demo.placeholder_active')} ${selectedLlm}...` : t('demo.placeholder_default');
       };
 
       const autoResizeInput = () => {
@@ -396,7 +398,7 @@
       const setBusy = (busy) => {
         isSending = busy;
         setChatEnabled(Boolean(selectedLlm));
-        chatStatus.textContent = busy ? `Using ${selectedLlm} • Sending to deployed gateway...` : `Using ${selectedLlm}`;
+        chatStatus.textContent = busy ? `${t('demo.chat_status_sending')}` : `${t('demo.chat_status_using')} ${selectedLlm}`;
       };
 
       const cleanResponse = (value) => {
@@ -439,9 +441,9 @@
         button.addEventListener('click', () => {
           selectedLlm = button.getAttribute('data-llm');
           llmButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
-          chatStatus.textContent = `Using ${selectedLlm}`;
+          chatStatus.textContent = `${t('demo.chat_status_using')} ${selectedLlm}`;
           setChatEnabled(true);
-          addMessage(`Model selected: ${selectedLlm}. You can start chatting.`, 'bot');
+          addMessage(`${t('demo.model_selected')} ${selectedLlm}. ${t('demo.model_selected_suffix')}`, 'bot');
           chatInput.focus();
         });
       });
@@ -450,7 +452,7 @@
         e.preventDefault();
         const message = chatInput.value.trim();
         if (!selectedLlm) {
-          addMessage('Select a model first to start.', 'bot');
+          addMessage(t('demo.select_first'), 'bot');
           return;
         }
         if (!message) return;
@@ -463,9 +465,9 @@
 
         try {
           const result = await sendMessage(message, runtimeSessionId);
-          addMessage(result.message || 'No response received.', 'bot', result.blocked);
+          addMessage(result.message || t('demo.no_response'), 'bot', result.blocked);
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unexpected error while sending chat message.';
+          const errorMessage = error instanceof Error ? error.message : t('demo.error_sending');
           addMessage(errorMessage, 'bot', true);
         } finally {
           setBusy(false);
@@ -490,8 +492,8 @@
       chatFileInput.addEventListener('change', () => {
         const file = chatFileInput.files && chatFileInput.files[0];
         if (!file) return;
-        addMessage(`Attachment selected: ${file.name}`, 'user');
-        addMessage('File received in demo mode. Connect backend storage to process attachments.', 'bot');
+        addMessage(`${t('demo.attachment_selected')} ${file.name}`, 'user');
+        addMessage(t('demo.attachment_reply'), 'bot');
         chatFileInput.value = '';
       });
 
@@ -501,9 +503,31 @@
         addIntro();
       });
 
-      setChatEnabled(false);
-      autoResizeInput();
-      addIntro();
+      // Defer initialization until i18n is ready
+      let initialized = false;
+      const doInit = () => {
+        if (!initialized) {
+          initialized = true;
+          setChatEnabled(false);
+          autoResizeInput();
+          addIntro();
+        }
+      };
+
+      // Listen for language changes to re-render UI text
+      document.addEventListener('languageChanged', () => {
+        if (!initialized) {
+          doInit();
+        } else {
+          chatStatus.textContent = selectedLlm ? `${t('demo.chat_status_using')} ${selectedLlm}` : t('demo.chat_status_default');
+          setChatEnabled(!!selectedLlm);
+        }
+      });
+
+      // Fallback: if i18n already loaded, init immediately
+      if (window.i18n && window.i18n.t('demo.welcome_msg') !== 'demo.welcome_msg') {
+        doInit();
+      }
     })();
   </script>
 </body>
