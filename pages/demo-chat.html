@@ -398,7 +398,7 @@
       const setBusy = (busy) => {
         isSending = busy;
         setChatEnabled(Boolean(selectedLlm));
-        chatStatus.textContent = busy ? `Using ${selectedLlm} • Sending to deployed gateway...` : `Using ${selectedLlm}`;
+        chatStatus.textContent = busy ? `${t('demo.chat_status_sending')}` : `${t('demo.chat_status_using')} ${selectedLlm}`;
       };
 
       const cleanResponse = (value) => {
@@ -465,9 +465,9 @@
 
         try {
           const result = await sendMessage(message, runtimeSessionId);
-          addMessage(result.message || 'No response received.', 'bot', result.blocked);
+          addMessage(result.message || t('demo.no_response'), 'bot', result.blocked);
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unexpected error while sending chat message.';
+          const errorMessage = error instanceof Error ? error.message : t('demo.error_sending');
           addMessage(errorMessage, 'bot', true);
         } finally {
           setBusy(false);

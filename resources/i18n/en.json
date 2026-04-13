@@ -50,7 +50,7 @@
     "stat_2_label": "average cost of a data breach in 2025",
     "stat_3_value": "77%",
     "stat_3_label": "of companies reported AI-related security incidents",
-    "stat_sources": "Sources: Cyberhaven 2025 Enterprise DLP Report \u00b7 IBM/Ponemon Cost of a Data Breach 2025 \u00b7 HiddenLayer AI Threat Landscape 2025",
+    "stat_sources": "Sources: Cyberhaven 2025 Enterprise DLP Report · IBM/Ponemon Cost of a Data Breach 2025 · HiddenLayer AI Threat Landscape 2025",
     "core_eyebrow": "What We Deliver",
     "core_title": "Core capabilities",
     "core_1_title": "Policy Control",
@@ -266,7 +266,7 @@
     "int_applications": "Applications",
     "int_internal_tools": "Internal Tools",
     "int_governance": "Governance",
-    "int_prunex_sub": "Policy \u00b7 Compliance \u00b7 Audit",
+    "int_prunex_sub": "Policy · Compliance · Audit",
     "int_ai_layer": "AI Layer",
     "int_ai_models": "AI Models",
     "int_agents": "Agents",
@@ -428,7 +428,10 @@
     "reply_demo": "You can request a personalized demo from the Contact page.",
     "reply_default": "Message received. This is a demo response path for the full-page chat experience.",
     "attachment_selected": "Attachment selected:",
-    "attachment_reply": "File received in demo mode. Connect backend storage to process attachments."
+    "attachment_reply": "File received in demo mode. Connect backend storage to process attachments.",
+    "chat_status_sending": "Sending to compliance gateway...",
+    "no_response": "No response received.",
+    "error_sending": "Unexpected error while sending chat message."
   },
   "assessment": {
     "landing_title": "How ready is your organisation for AI and data compliance?",
@@ -458,13 +461,11 @@
     "fw_recommended": "Recommended",
     "fw_penalty_label": "Penalty:",
     "begin_assessment": "Begin Assessment",
-
     "resume_title": "Welcome back",
     "resume_desc": "You have an assessment in progress",
     "resume_btn": "Resume",
     "resume_fresh": "Start Fresh",
     "resume_no_fw": "Not selected yet",
-
     "intake_q1": "What best describes your organisation?",
     "intake_q1_o1": "Healthcare / MedTech",
     "intake_q1_o2": "Financial Services",
@@ -478,7 +479,6 @@
     "intake_q3_o2": "Early stage: some policies exist but informal",
     "intake_q3_o3": "Developing: formal programme in place",
     "intake_q3_o4": "Advanced: certified or externally audited",
-
     "classify_header": "EU AI Act Classification · Question",
     "classify_q1": "Does your organisation develop or deploy AI systems?",
     "classify_q1_o1": "We develop AI (build models or AI-powered products)",
@@ -508,7 +508,6 @@
     "classify_q5_o2": "50–500",
     "classify_q5_o3": "500–5,000",
     "classify_q5_o4": "More than 5,000",
-
     "maturity_0": "Not Started",
     "maturity_1": "Aware",
     "maturity_2": "In Progress",
@@ -517,7 +516,6 @@
     "score_label": "Score",
     "skipped_msg": "Skipped based on your previous answer",
     "why_matters": "Why does this matter?",
-
     "lead_almost": "You're almost there",
     "lead_desc_full": "Enter your details to view your personalised compliance readiness report.",
     "lead_name": "Full Name",
@@ -529,7 +527,6 @@
     "lead_error": "Please complete all required fields and accept the privacy policy.",
     "lead_email_error": "Please enter a valid work email address.",
     "submit_results": "View My Results",
-
     "results_title": "Your Compliance Readiness Score",
     "results_eu_title": "EU AI Act Status",
     "results_days": "days",
@@ -550,7 +547,6 @@
     "results_share_frameworks": "Frameworks:",
     "results_share_risk": "EU AI Act Risk Class:",
     "results_share_date": "Assessed:",
-
     "maturity_none": "Not started",
     "maturity_initial": "Initial",
     "maturity_developing": "Developing",
