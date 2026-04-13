@@ -956,24 +956,24 @@
       <div class="container">
         <div id="resume-banner"></div>
         <div class="assess-hero">
-          <h1>How ready is your organisation for AI and data compliance?</h1>
-          <p class="subtitle">Get a personalised readiness score across 13 regulatory frameworks in under 10 minutes.</p>
+          <h1 data-i18n="assessment.landing_title">How ready is your organisation for AI and data compliance?</h1>
+          <p class="subtitle" data-i18n="assessment.landing_subtitle">Get a personalised readiness score across 13 regulatory frameworks in under 10 minutes.</p>
           <div class="assess-stats">
             <div class="assess-stat">
               <div class="assess-stat-value">13</div>
-              <div class="assess-stat-label">Frameworks</div>
+              <div class="assess-stat-label" data-i18n="assessment.stat_frameworks">Frameworks</div>
             </div>
             <div class="assess-stat">
               <div class="assess-stat-value">213</div>
-              <div class="assess-stat-label">Questions</div>
+              <div class="assess-stat-label" data-i18n="assessment.stat_questions">Questions</div>
             </div>
             <div class="assess-stat">
               <div class="assess-stat-value">~10 min</div>
-              <div class="assess-stat-label">To Complete</div>
+              <div class="assess-stat-label" data-i18n="assessment.stat_time">To Complete</div>
             </div>
           </div>
-          <button class="btn btn-primary btn-lg" id="btn-start-assessment">Start Assessment</button>
-          <p class="assess-disclaimer">This assessment is indicative only and does not constitute legal advice or compliance certification.</p>
+          <button class="btn btn-primary btn-lg" id="btn-start-assessment" data-i18n="assessment.begin">Start Assessment</button>
+          <p class="assess-disclaimer" data-i18n="assessment.disclaimer">This assessment is indicative only and does not constitute legal advice or compliance certification.</p>
         </div>
       </div>
     </section>
@@ -993,9 +993,9 @@
     <section class="assessment-phase" id="phase-3">
       <div class="container">
         <div class="section-header-center">
-          <span class="eyebrow">Select Frameworks</span>
-          <h2>Which frameworks are relevant to your organisation?</h2>
-          <p>Based on your profile, we've highlighted recommended frameworks. Select up to 3.</p>
+          <span class="eyebrow" data-i18n="assessment.fw_eyebrow">Select Frameworks</span>
+          <h2 data-i18n="assessment.fw_title">Which frameworks are relevant to your organisation?</h2>
+          <p data-i18n="assessment.fw_desc">Based on your profile, we've highlighted recommended frameworks. Select up to 3.</p>
         </div>
         <div id="fw-grid-container"></div>
         <p class="fw-helper">
@@ -1051,35 +1051,35 @@
     <section class="assessment-phase" id="phase-6">
       <div class="container">
         <div class="lead-capture">
-          <h2>You're almost there</h2>
-          <p class="subtitle">Enter your details to view your personalised compliance readiness report.</p>
+          <h2 data-i18n="assessment.lead_almost">You're almost there</h2>
+          <p class="subtitle" data-i18n="assessment.lead_desc_full">Enter your details to view your personalised compliance readiness report.</p>
           <form class="lead-form" id="lead-form" novalidate>
             <div class="lead-field">
-              <label for="lead-name">Full Name <span class="required">*</span></label>
-              <input type="text" id="lead-name" placeholder="Your full name" required>
+              <label for="lead-name" data-i18n="assessment.lead_name">Full Name <span class="required">*</span></label>
+              <input type="text" id="lead-name" data-i18n-placeholder="assessment.lead_name" placeholder="Your full name" required>
             </div>
             <div class="lead-field">
-              <label for="lead-email">Work Email <span class="required">*</span></label>
-              <input type="email" id="lead-email" placeholder="you@company.com" required>
+              <label for="lead-email" data-i18n="assessment.lead_email">Work Email <span class="required">*</span></label>
+              <input type="email" id="lead-email" data-i18n-placeholder="assessment.lead_email" placeholder="you@company.com" required>
             </div>
             <div class="lead-field">
-              <label for="lead-company">Company Name <span class="required">*</span></label>
-              <input type="text" id="lead-company" placeholder="Company name" required>
+              <label for="lead-company" data-i18n="assessment.lead_company">Company Name <span class="required">*</span></label>
+              <input type="text" id="lead-company" data-i18n-placeholder="assessment.lead_company" placeholder="Company name" required>
             </div>
             <div class="lead-field">
-              <label for="lead-role">Job Title / Role <span class="required">*</span></label>
-              <input type="text" id="lead-role" placeholder="Your role" required>
+              <label for="lead-role" data-i18n="assessment.lead_role">Job Title / Role <span class="required">*</span></label>
+              <input type="text" id="lead-role" data-i18n-placeholder="assessment.lead_role" placeholder="Your role" required>
             </div>
             <label class="lead-checkbox">
               <input type="checkbox" id="lead-consent" required>
-              I agree to Prunex's <a href="privacy.html">Privacy Policy</a> and consent to being contacted about my assessment results.
+              <span data-i18n="assessment.lead_consent">I agree to Prunex's Privacy Policy and consent to being contacted about my assessment results.</span>
             </label>
             <label class="lead-checkbox">
               <input type="checkbox" id="lead-marketing">
-              I'd like to receive AI governance insights and updates from Prunex.
+              <span data-i18n="assessment.lead_marketing">I'd like to receive AI governance insights and updates from Prunex.</span>
             </label>
-            <p class="lead-error" id="lead-error-msg">Please complete all required fields and accept the privacy policy.</p>
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">View My Results</button>
+            <p class="lead-error" id="lead-error-msg" data-i18n="assessment.lead_error">Please complete all required fields and accept the privacy policy.</p>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" data-i18n="assessment.submit_results">View My Results</button>
           </form>
         </div>
       </div>
@@ -1096,9 +1096,10 @@
   <div id="site-footer"></div>
   <div id="site-cookie-banner"></div>
 
-  <script src="../resources/js/components.js"></script>
-  <script src="../resources/js/scoring.js"></script>
-  <script src="../resources/js/assessment.js"></script>
+  <script src="../resources/js/components.js?v=2"></script>
+  <script src="../resources/js/i18n.js?v=2"></script>
+  <script src="../resources/js/scoring.js?v=2"></script>
+  <script src="../resources/js/assessment.js?v=3"></script>
   <script src="../resources/js/main.js"></script>
 </body>
 </html>

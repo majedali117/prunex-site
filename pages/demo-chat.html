@@ -274,13 +274,13 @@
       <div class="chat-demo-grid">
         <aside class="chat-side reveal">
           <div>
-            <span class="eyebrow">Demo Workspace</span>
-            <h2>Full-page AI chat</h2>
-            <p>Select an LLM, then start a governed chat session.</p>
+            <span class="eyebrow" data-i18n="demo.sidebar_eyebrow">Demo Workspace</span>
+            <h2 data-i18n="demo.sidebar_title">Full-page AI chat</h2>
+            <p data-i18n="demo.sidebar_desc">Select an LLM, then start a governed chat session.</p>
           </div>
 
           <div>
-            <div class="chip">Model Selection</div>
+            <div class="chip" data-i18n="demo.model_selection">Model Selection</div>
             <div class="llm-options" id="llm-options" style="margin-top: 12px;">
               <button type="button" class="llm-option" data-llm="ChatGPT">ChatGPT</button>
               <button type="button" class="llm-option" data-llm="Gemini">Gemini</button>
@@ -288,7 +288,7 @@
             </div>
           </div>
 
-          <div class="guard-note">
+          <div class="guard-note" data-i18n="demo.guard_note">
             Messages containing sensitive data are blocked before reaching the model.
           </div>
         </aside>
@@ -296,10 +296,10 @@
         <section class="chat-main reveal reveal-delay-1" aria-label="AI chat demo">
           <div class="chat-main-header">
             <div>
-              <div class="chat-main-title">Prunex AI Chat Demo</div>
-              <div class="chat-main-sub" id="chat-status">Choose a model to begin</div>
+              <div class="chat-main-title" data-i18n="demo.chat_title">Prunex AI Chat Demo</div>
+              <div class="chat-main-sub" id="chat-status" data-i18n="demo.chat_status_default">Choose a model to begin</div>
             </div>
-            <button type="button" class="btn text-sm" id="clear-chat">Clear chat</button>
+            <button type="button" class="btn text-sm" id="clear-chat" data-i18n="demo.clear_chat">Clear chat</button>
           </div>
 
           <div class="chat-messages" id="chat-messages"></div>
@@ -338,6 +338,7 @@
   <div id="site-cookie-banner"></div>
 
   <script src="../resources/js/components.js"></script>
+  <script src="../resources/js/i18n.js"></script>
   <script src="../resources/js/main.js"></script>
   <script>
     (function () {
@@ -354,6 +355,8 @@
 
       if (!chatForm || !chatInput || !chatSend || !chatAttach || !chatFileInput || !chatMessages || !llmOptionsWrap || !chatStatus || !clearChat) return;
 
+      const t = (key) => window.i18n ? window.i18n.t(key) : key;
+
       const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
       const phoneRegex = /(?:\+?\d[\d\s().-]{7,}\d)/;
       let selectedLlm = null;
@@ -367,14 +370,14 @@
       };
 
       const addIntro = () => {
-        addMessage('Welcome. Choose ChatGPT, Gemini, or Claude from the left to start.', 'bot');
+        addMessage(t('demo.welcome_msg'), 'bot');
       };
 
       const setChatEnabled = (enabled) => {
         chatInput.disabled = !enabled;
         chatSend.disabled = !enabled;
         chatAttach.disabled = !enabled;
-        chatInput.placeholder = enabled ? `Message ${selectedLlm}...` : 'Select a model first...';
+        chatInput.placeholder = enabled ? `${t('demo.placeholder_active')} ${selectedLlm}...` : t('demo.placeholder_default');
       };
 
       const autoResizeInput = () => {
@@ -391,25 +394,25 @@
 
       const getReply = (message) => {
         const input = message.toLowerCase();
-        if (input.includes('pricing') || input.includes('price')) {
-          return `[${selectedLlm}] Pricing depends on scope and controls. Use Contact for a tailored plan.`;
+        if (input.includes('pricing') || input.includes('price') || input.includes('preis')) {
+          return `[${selectedLlm}] ${t('demo.reply_pricing')}`;
         }
-        if (input.includes('compliance') || input.includes('gdpr') || input.includes('hipaa') || input.includes('eu ai act')) {
-          return `[${selectedLlm}] Prunex maps controls to EU AI Act, GDPR, HIPAA, NIST AI RMF, and ISO 42001.`;
+        if (input.includes('compliance') || input.includes('gdpr') || input.includes('dsgvo') || input.includes('hipaa') || input.includes('eu ai act')) {
+          return `[${selectedLlm}] ${t('demo.reply_compliance')}`;
         }
         if (input.includes('demo')) {
-          return `[${selectedLlm}] You can request a personalized demo from the Contact page.`;
+          return `[${selectedLlm}] ${t('demo.reply_demo')}`;
         }
-        return `[${selectedLlm}] Message received. This is a demo response path for the full-page chat experience.`;
+        return `[${selectedLlm}] ${t('demo.reply_default')}`;
       };
 
       llmButtons.forEach((button) => {
         button.addEventListener('click', () => {
           selectedLlm = button.getAttribute('data-llm');
           llmButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
-          chatStatus.textContent = `Using ${selectedLlm}`;
+          chatStatus.textContent = `${t('demo.chat_status_using')} ${selectedLlm}`;
           setChatEnabled(true);
-          addMessage(`Model selected: ${selectedLlm}. You can start chatting.`, 'bot');
+          addMessage(`${t('demo.model_selected')} ${selectedLlm}. ${t('demo.model_selected_suffix')}`, 'bot');
           chatInput.focus();
         });
       });
@@ -418,7 +421,7 @@
         e.preventDefault();
         const message = chatInput.value.trim();
         if (!selectedLlm) {
-          addMessage('Select a model first to start.', 'bot');
+          addMessage(t('demo.select_first'), 'bot');
           return;
         }
         if (!message) return;
@@ -428,7 +431,7 @@
         autoResizeInput();
 
         if (hasSensitiveData(message)) {
-          addMessage('Blocked: this message contains sensitive data (email or phone number). Remove it and try again.', 'bot', true);
+          addMessage(t('demo.blocked_msg'), 'bot', true);
           return;
         }
 
@@ -452,8 +455,8 @@
       chatFileInput.addEventListener('change', () => {
         const file = chatFileInput.files && chatFileInput.files[0];
         if (!file) return;
-        addMessage(`Attachment selected: ${file.name}`, 'user');
-        addMessage('File received in demo mode. Connect backend storage to process attachments.', 'bot');
+        addMessage(`${t('demo.attachment_selected')} ${file.name}`, 'user');
+        addMessage(t('demo.attachment_reply'), 'bot');
         chatFileInput.value = '';
       });
 
@@ -462,9 +465,31 @@
         addIntro();
       });
 
-      setChatEnabled(false);
-      autoResizeInput();
-      addIntro();
+      // Defer initialization until i18n is ready
+      let initialized = false;
+      const doInit = () => {
+        if (!initialized) {
+          initialized = true;
+          setChatEnabled(false);
+          autoResizeInput();
+          addIntro();
+        }
+      };
+
+      // Listen for language changes to re-render UI text
+      document.addEventListener('languageChanged', () => {
+        if (!initialized) {
+          doInit();
+        } else {
+          chatStatus.textContent = selectedLlm ? `${t('demo.chat_status_using')} ${selectedLlm}` : t('demo.chat_status_default');
+          setChatEnabled(!!selectedLlm);
+        }
+      });
+
+      // Fallback: if i18n already loaded, init immediately
+      if (window.i18n && window.i18n.t('demo.welcome_msg') !== 'demo.welcome_msg') {
+        doInit();
+      }
     })();
   </script>
 </body>

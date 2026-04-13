@@ -12,6 +12,11 @@
   var STORAGE_KEY = 'prunex_assessment_v1';
   var QUESTIONS_URL = '../resources/questions.json';
 
+  // ── i18n Helper ──────────────────────────────────────────────────
+  function t(key) {
+    return window.i18n ? window.i18n.t(key) : key;
+  }
+
   // ── State ────────────────────────────────────────────────────────
   var state = {
     phase: 1,
@@ -33,103 +38,105 @@
   var intakeStep = 0;
 
   // ── Intake Questions ─────────────────────────────────────────────
-  var INTAKE_QUESTIONS = [
-    {
-      key: 'industry',
-      question: 'What best describes your organisation?',
-      options: [
-        'Healthcare / MedTech',
-        'Financial Services',
-        'Technology / SaaS',
-        'Manufacturing / Industry',
-        'Legal / Insurance',
-        'Other',
-      ],
-    },
-    {
-      key: 'size',
-      question: 'How many employees does your organisation have?',
-      options: ['1-50', '51-200', '201-1000', '1000+'],
-    },
-    {
-      key: 'maturity',
-      question:
-        'How would you describe your current AI governance maturity?',
-      options: [
-        'Just starting: no formal policies',
-        'Early stage: some policies exist but informal',
-        'Developing: formal programme in place',
-        'Advanced: certified or externally audited',
-      ],
-    },
-  ];
+  function getIntakeQuestions() {
+    return [
+      {
+        key: 'industry',
+        question: t('assessment.intake_q1'),
+        options: [
+          { value: 'Healthcare / MedTech', label: t('assessment.intake_q1_o1') },
+          { value: 'Financial Services', label: t('assessment.intake_q1_o2') },
+          { value: 'Technology / SaaS', label: t('assessment.intake_q1_o3') },
+          { value: 'Manufacturing / Industry', label: t('assessment.intake_q1_o4') },
+          { value: 'Legal / Insurance', label: t('assessment.intake_q1_o5') },
+          { value: 'Other', label: t('assessment.intake_q1_o6') },
+        ],
+      },
+      {
+        key: 'size',
+        question: t('assessment.intake_q2'),
+        options: [
+          { value: '1-50', label: '1-50' },
+          { value: '51-200', label: '51-200' },
+          { value: '201-1000', label: '201-1000' },
+          { value: '1000+', label: '1000+' },
+        ],
+      },
+      {
+        key: 'maturity',
+        question: t('assessment.intake_q3'),
+        options: [
+          { value: 'Just starting: no formal policies', label: t('assessment.intake_q3_o1') },
+          { value: 'Early stage: some policies exist but informal', label: t('assessment.intake_q3_o2') },
+          { value: 'Developing: formal programme in place', label: t('assessment.intake_q3_o3') },
+          { value: 'Advanced: certified or externally audited', label: t('assessment.intake_q3_o4') },
+        ],
+      },
+    ];
+  }
 
-  // ── Classification Gate Questions ────────────────────────────────
-  var CLASSIFY_QUESTIONS = [
-    {
-      key: 'q1',
-      question:
-        'Does your organisation develop or deploy AI systems?',
-      type: 'single',
-      options: [
-        { value: 'a', label: 'We develop AI (build models or AI-powered products)' },
-        { value: 'b', label: 'We deploy AI (use AI systems built by third parties)' },
-        { value: 'c', label: 'Both' },
-        { value: 'd', label: 'Neither, we only use consumer AI tools' },
-      ],
-    },
-    {
-      key: 'q2',
-      question:
-        'Do any of your AI systems operate in these areas?',
-      type: 'multi',
-      options: [
-        { value: 'employment', label: 'Employment / HR screening' },
-        { value: 'credit', label: 'Credit scoring or insurance pricing' },
-        { value: 'healthcare', label: 'Healthcare diagnosis or treatment recommendations' },
-        { value: 'biometric', label: 'Biometric identification of individuals' },
-        { value: 'law', label: 'Law enforcement or justice systems' },
-        { value: 'education', label: 'Education assessment' },
-        { value: 'infrastructure', label: 'Critical infrastructure management' },
-        { value: 'none', label: 'None of the above' },
-      ],
-    },
-    {
-      key: 'q3',
-      question:
-        'Do any AI systems you use perform any of the following?',
-      type: 'single',
-      options: [
-        { value: 'a', label: 'Manipulate people\'s behaviour without their awareness' },
-        { value: 'b', label: 'Exploit vulnerabilities of specific groups' },
-        { value: 'c', label: 'Score citizens for social compliance purposes' },
-        { value: 'd', label: 'None of the above' },
-      ],
-    },
-    {
-      key: 'q4',
-      question:
-        'Do you use General Purpose AI models such as ChatGPT API, Claude API, Gemini API, or open-source models like Llama?',
-      type: 'single',
-      options: [
-        { value: 'a', label: 'Yes, we build products on top of them' },
-        { value: 'b', label: 'Yes, employees use them directly for work tasks' },
-        { value: 'c', label: 'No' },
-      ],
-    },
-    {
-      key: 'q5',
-      question:
-        'How many employees regularly use AI tools in daily work?',
-      type: 'single',
-      options: [
-        { value: 'a', label: 'Fewer than 50' },
-        { value: 'b', label: '50–500' },
-        { value: 'c', label: '500–5,000' },
-        { value: 'd', label: 'More than 5,000' },
-      ],
-    },
-  ];
+  function getClassifyQuestions() {
+    return [
+      {
+        key: 'q1',
+        question: t('assessment.classify_q1'),
+        type: 'single',
+        options: [
+          { value: 'a', label: t('assessment.classify_q1_o1') },
+          { value: 'b', label: t('assessment.classify_q1_o2') },
+          { value: 'c', label: t('assessment.classify_q1_o3') },
+          { value: 'd', label: t('assessment.classify_q1_o4') },
+        ],
+      },
+      {
+        key: 'q2',
+        question: t('assessment.classify_q2'),
+        type: 'multi',
+        options: [
+          { value: 'employment', label: t('assessment.classify_q2_o1') },
+          { value: 'credit', label: t('assessment.classify_q2_o2') },
+          { value: 'healthcare', label: t('assessment.classify_q2_o3') },
+          { value: 'biometric', label: t('assessment.classify_q2_o4') },
+          { value: 'law', label: t('assessment.classify_q2_o5') },
+          { value: 'education', label: t('assessment.classify_q2_o6') },
+          { value: 'infrastructure', label: t('assessment.classify_q2_o7') },
+          { value: 'none', label: t('assessment.classify_q2_o8') },
+        ],
+      },
+      {
+        key: 'q3',
+        question: t('assessment.classify_q3'),
+        type: 'single',
+        options: [
+          { value: 'a', label: t('assessment.classify_q3_o1') },
+          { value: 'b', label: t('assessment.classify_q3_o2') },
+          { value: 'c', label: t('assessment.classify_q3_o3') },
+          { value: 'd', label: t('assessment.classify_q3_o4') },
+        ],
+      },
+      {
+        key: 'q4',
+        question: t('assessment.classify_q4'),
+        type: 'single',
+        options: [
+          { value: 'a', label: t('assessment.classify_q4_o1') },
+          { value: 'b', label: t('assessment.classify_q4_o2') },
+          { value: 'c', label: t('assessment.classify_q4_o3') },
+        ],
+      },
+      {
+        key: 'q5',
+        question: t('assessment.classify_q5'),
+        type: 'single',
+        options: [
+          { value: 'a', label: t('assessment.classify_q5_o1') },
+          { value: 'b', label: t('assessment.classify_q5_o2') },
+          { value: 'c', label: t('assessment.classify_q5_o3') },
+          { value: 'd', label: t('assessment.classify_q5_o4') },
+        ],
+      },
+    ];
+  }
 
   // ── Helpers ──────────────────────────────────────────────────────
   function $(id) {
@@ -207,6 +214,26 @@
         bindPhase3();
         bindPhase5Nav();
         bindPhase6();
+
+        // Listen for language changes to re-render dynamic content
+        document.addEventListener('languageChanged', function () {
+          var activePhase = state.phase;
+          // Re-render resume banner if on landing page
+          if (activePhase === 1 && state.phase > 1) {
+            renderResumeBanner();
+          }
+          // Also re-render the resume banner if it exists (phase > 1 in saved state)
+          var resumeBanner = $('resume-banner');
+          if (resumeBanner && resumeBanner.innerHTML.trim()) {
+            renderResumeBanner();
+          }
+          if (activePhase === 2) renderIntakeStep();
+          if (activePhase === 3) renderFrameworkGrid();
+          if (activePhase === 4) renderClassifyStep();
+          if (activePhase === 5) renderCurrentCategory();
+          // Phase 6 (lead form) is handled by data-i18n attributes
+          // Phase 7 (results) is finalized and doesn't need re-render
+        });
       })
       .catch(function () {
         $('assess-loading').style.display = 'none';
@@ -216,18 +243,18 @@
 
   // ── Phase 1: Landing ────────────────────────────────────────────
   function renderResumeBanner() {
-    var frameworks = state.selected_frameworks.join(', ') || 'Not selected yet';
+    var frameworks = state.selected_frameworks.join(', ') || t('assessment.resume_no_fw');
     $('resume-banner').innerHTML =
       '<div class="resume-banner">' +
       '<div class="resume-banner-text">' +
-      '<h3>Welcome back</h3>' +
-      '<p>You have an assessment in progress' +
+      '<h3>' + t('assessment.resume_title') + '</h3>' +
+      '<p>' + t('assessment.resume_desc') +
       (state.selected_frameworks.length ? ' (' + frameworks + ')' : '') +
       '.</p>' +
       '</div>' +
       '<div class="resume-banner-actions">' +
-      '<button class="btn btn-primary" id="btn-resume">Resume</button>' +
-      '<button class="btn btn-ghost" id="btn-start-fresh">Start Fresh</button>' +
+      '<button class="btn btn-primary" id="btn-resume">' + t('assessment.resume_btn') + '</button>' +
+      '<button class="btn btn-ghost" id="btn-start-fresh">' + t('assessment.resume_fresh') + '</button>' +
       '</div>' +
       '</div>';
 
@@ -270,12 +297,13 @@
 
   // ── Phase 2: Intake ─────────────────────────────────────────────
   function renderIntakeStep() {
+    var INTAKE_QUESTIONS = getIntakeQuestions();
     var q = INTAKE_QUESTIONS[intakeStep];
     var currentVal = state.intake[q.key];
     var html =
-      '<div class="intake-step-indicator">Question ' +
+      '<div class="intake-step-indicator">' + t('assessment.question') + ' ' +
       (intakeStep + 1) +
-      ' of ' +
+      ' ' + t('assessment.of') + ' ' +
       INTAKE_QUESTIONS.length +
       '</div>' +
       '<h2>' +
@@ -287,18 +315,20 @@
 
     for (var i = 0; i < q.options.length; i++) {
       var opt = q.options[i];
-      var sel = currentVal === opt ? ' selected' : '';
+      var optValue = opt.value || opt;
+      var optLabel = opt.label || opt;
+      var sel = currentVal === optValue ? ' selected' : '';
       html +=
         '<button class="intake-option' +
         sel +
         '" data-value="' +
-        opt +
+        optValue +
         '" role="radio" aria-checked="' +
-        (currentVal === opt ? 'true' : 'false') +
+        (currentVal === optValue ? 'true' : 'false') +
         '" tabindex="0">' +
         '<div class="intake-option-radio"></div>' +
         '<span>' +
-        opt +
+        optLabel +
         '</span>' +
         '</button>';
     }
@@ -307,7 +337,7 @@
     html += '<div class="intake-nav">';
     if (intakeStep > 0) {
       html +=
-        '<button class="btn btn-ghost" id="intake-back">← Back</button>';
+        '<button class="btn btn-ghost" id="intake-back">' + t('assessment.back_arrow') + '</button>';
     }
     html += '</div>';
 
@@ -332,7 +362,7 @@
 
         // Auto-advance after short delay
         setTimeout(function () {
-          if (intakeStep < INTAKE_QUESTIONS.length - 1) {
+          if (intakeStep < getIntakeQuestions().length - 1) {
             intakeStep++;
             renderIntakeStep();
           } else {
@@ -377,6 +407,18 @@
       if (isSelected) classes += ' selected';
       if (isDisabled) classes += ' disabled';
 
+      // Use i18n for description, urgency, penalty (fallback to original)
+      var fwDescKey = 'fw.' + fw.id + '.description';
+      var fwUrgencyKey = 'fw.' + fw.id + '.urgency';
+      var fwPenaltyKey = 'fw.' + fw.id + '.penalty';
+      var fwDesc = t(fwDescKey);
+      var fwUrgency = t(fwUrgencyKey);
+      var fwPenalty = t(fwPenaltyKey);
+      // Fallback to JSON data if key not found (t returns the key itself)
+      if (fwDesc === fwDescKey) fwDesc = fw.description;
+      if (fwUrgency === fwUrgencyKey) fwUrgency = fw.urgency;
+      if (fwPenalty === fwPenaltyKey) fwPenalty = fw.penalty;
+
       html +=
         '<div class="' +
         classes +
@@ -396,13 +438,13 @@
         '</div>' +
         '</div>' +
         '<p class="fw-card-desc">' +
-        fw.description +
+        fwDesc +
         '</p>' +
         '<div class="fw-card-tags">';
 
       if (isRecommended) {
         html +=
-          '<span class="fw-tag fw-tag-recommended">Recommended</span>';
+          '<span class="fw-tag fw-tag-recommended">' + t('assessment.fw_recommended') + '</span>';
       }
       html +=
         '<span class="fw-tag">' +
@@ -413,10 +455,10 @@
         '</span>' +
         '</div>' +
         '<div class="fw-card-urgency">⏱ ' +
-        fw.urgency +
+        fwUrgency +
         '</div>' +
-        '<div class="fw-card-penalty">Penalty: ' +
-        fw.penalty +
+        '<div class="fw-card-penalty">' + t('assessment.fw_penalty_label') + ' ' +
+        fwPenalty +
         '</div>' +
         '</div>';
     }
@@ -458,7 +500,7 @@
 
   function bindPhase3() {
     $('btn-fw-back').addEventListener('click', function () {
-      intakeStep = INTAKE_QUESTIONS.length - 1;
+      intakeStep = getIntakeQuestions().length - 1;
       setPhase(2);
       renderIntakeStep();
     });
@@ -482,13 +524,14 @@
 
   // ── Phase 4: Classification Gate ────────────────────────────────
   function renderClassifyStep() {
+    var CLASSIFY_QUESTIONS = getClassifyQuestions();
     var q = CLASSIFY_QUESTIONS[classifyStep];
     var currentVal = state.classification_answers[q.key];
 
     var html =
-      '<div class="classify-step">EU AI Act Classification · Question ' +
+      '<div class="classify-step">' + t('assessment.classify_header') + ' ' +
       (classifyStep + 1) +
-      ' of ' +
+      ' ' + t('assessment.of') + ' ' +
       CLASSIFY_QUESTIONS.length +
       '</div>' +
       '<h2>' +
@@ -528,8 +571,8 @@
     html += '</div>';
     html +=
       '<div class="classify-nav">' +
-      '<button class="btn btn-ghost" id="classify-back">← Back</button>' +
-      '<button class="btn btn-primary" id="classify-next">Next →</button>' +
+      '<button class="btn btn-ghost" id="classify-back">' + t('assessment.back_arrow') + '</button>' +
+      '<button class="btn btn-primary" id="classify-next">' + t('assessment.next') + '</button>' +
       '</div>';
 
     $('classify-container').innerHTML = html;
@@ -591,7 +634,7 @@
         return;
       }
 
-      if (classifyStep < CLASSIFY_QUESTIONS.length - 1) {
+      if (classifyStep < getClassifyQuestions().length - 1) {
         classifyStep++;
         renderClassifyStep();
       } else {
@@ -665,19 +708,19 @@
     $('progress-bar').style.width = pct + '%';
     $('progress-category').textContent = cat;
     $('progress-count').textContent =
-      totalAnswered + ' of ' + totalQuestions + ' answered';
+      totalAnswered + ' ' + t('assessment.of') + ' ' + totalQuestions + ' ' + t('assessment.answered');
 
     var unanswered = totalQuestions - totalAnswered;
     var mins = PrunexScoring.estimateMinutesRemaining(unanswered);
     $('progress-time').textContent =
-      mins > 0 ? '~' + mins + ' min remaining' : 'Almost done';
+      mins > 0 ? '~' + mins + ' ' + t('assessment.min_remaining') : t('assessment.almost_done');
 
     // Render questions
     var html =
       '<div class="question-category-header">' +
-      '<span class="eyebrow">Category ' +
+      '<span class="eyebrow">' + t('assessment.category') + ' ' +
       (currentCategoryIndex + 1) +
-      ' of ' +
+      ' ' + t('assessment.of') + ' ' +
       categories.length +
       '</span>' +
       '<h2>' +
@@ -709,11 +752,11 @@
 
       if (isSkipped) {
         html +=
-          '<div class="question-skipped-msg">Skipped based on your previous answer</div>';
+          '<div class="question-skipped-msg">' + t('assessment.skipped_msg') + '</div>';
       } else {
         // Maturity options
-        html += '<div class="maturity-options" role="radiogroup" aria-label="Score for question">';
-        var labels = ['Not Started', 'Aware', 'In Progress', 'Implemented', 'Optimized'];
+        html += '<div class="maturity-options" role="radiogroup" aria-label="' + t('assessment.score_label') + '">';
+        var labels = [t('assessment.maturity_0'), t('assessment.maturity_1'), t('assessment.maturity_2'), t('assessment.maturity_3'), t('assessment.maturity_4')];
         for (var s = 0; s <= 4; s++) {
           var matLabel =
             q.maturity_labels && q.maturity_labels[s]
@@ -751,7 +794,7 @@
           html +=
             '<div class="question-rationale">' +
             '<button class="rationale-toggle" aria-expanded="false">' +
-            '<span class="rationale-arrow">▶</span> Why does this matter?' +
+            '<span class="rationale-arrow">▶</span> ' + t('assessment.why_matters') +
             '</button>' +
             '<div class="rationale-content">' +
             q.rationale +
@@ -789,8 +832,8 @@
       currentCategoryIndex === 0 ? 'hidden' : 'visible';
     $('btn-q-next').textContent =
       currentCategoryIndex === categories.length - 1
-        ? 'Complete Assessment →'
-        : 'Next →';
+        ? t('assessment.complete_assessment')
+        : t('assessment.next');
   }
 
   function handleMaturityClick() {
@@ -825,7 +868,7 @@
       } else {
         // Go back to framework selection or classification
         if (state.selected_frameworks.indexOf('EU AI Act') !== -1) {
-          classifyStep = CLASSIFY_QUESTIONS.length - 1;
+          classifyStep = getClassifyQuestions().length - 1;
           setPhase(4);
           renderClassifyStep();
         } else {
@@ -920,7 +963,7 @@
 
       // Basic email validation
       if (email.indexOf('@') === -1 || email.indexOf('.') === -1) {
-        $('lead-error-msg').textContent = 'Please enter a valid work email address.';
+        $('lead-error-msg').textContent = t('assessment.lead_email_error');
         $('lead-error-msg').classList.add('show');
         return;
       }
@@ -1007,7 +1050,7 @@
       ';">' +
       maturity.label +
       '</div>' +
-      '<h2>Your Compliance Readiness Score</h2>' +
+      '<h2>' + t('assessment.results_title') + '</h2>' +
       '</div>';
 
     // EU AI Act section
@@ -1024,15 +1067,15 @@
         minimal_risk: '#16a34a',
       };
       var riskLabels = {
-        prohibited: 'Prohibited',
-        high_risk: 'High-Risk',
-        limited_risk: 'Limited Risk',
-        minimal_risk: 'Minimal Risk',
+        prohibited: t('assessment.results_risk_prohibited'),
+        high_risk: t('assessment.results_risk_high'),
+        limited_risk: t('assessment.results_risk_limited'),
+        minimal_risk: t('assessment.results_risk_minimal'),
       };
 
       html +=
         '<div class="results-eu-section">' +
-        '<h3 style="margin-bottom: 16px;">EU AI Act Status</h3>' +
+        '<h3 style="margin-bottom: 16px;">' + t('assessment.results_eu_title') + '</h3>' +
         '<div class="risk-badge" style="background: ' +
         (riskColors[state.risk_class] || '#737373') +
         ';">' +
@@ -1040,11 +1083,11 @@
         '</div>' +
         '<div class="countdown-text">' +
         countdown.days +
-        ' days</div>' +
+        ' ' + t('assessment.results_days') + '</div>' +
         '<div class="countdown-label">' +
         countdown.label +
         '</div>' +
-        '<div class="penalty-text">Potential penalty: ' +
+        '<div class="penalty-text">' + t('assessment.results_penalty') + ' ' +
         penalty +
         '</div>' +
         '</div>';
@@ -1158,7 +1201,7 @@
       if (fwResult.gaps.length > 0) {
         html +=
           '<div class="fw-gaps">' +
-          '<h4>Top Priority Gaps</h4>';
+          '<h4>' + t('assessment.results_gaps_title') + '</h4>';
         for (var gi = 0; gi < fwResult.gaps.length; gi++) {
           var gap = fwResult.gaps[gi];
           html +=
@@ -1180,18 +1223,18 @@
     // CTA section
     html +=
       '<div class="results-cta">' +
-      '<h3>What\'s next?</h3>' +
-      '<p style="color: var(--text-secondary); margin-bottom: 24px;">Our team can help you close these gaps with tailored policy frameworks and implementation support.</p>' +
+      '<h3>' + t('assessment.results_whats_next') + '</h3>' +
+      '<p style="color: var(--text-secondary); margin-bottom: 24px;">' + t('assessment.results_next_desc') + '</p>' +
       '<div class="results-cta-buttons">' +
-      '<a href="contact.html" class="btn btn-primary btn-lg">Book a Call with Prunex</a>' +
-      '<button class="btn btn-ghost" id="btn-download-report">Download Report</button>' +
-      '<button class="btn btn-ghost" id="btn-share-results">Copy Summary</button>' +
+      '<a href="contact.html" class="btn btn-primary btn-lg">' + t('assessment.results_book_call') + '</a>' +
+      '<button class="btn btn-ghost" id="btn-download-report">' + t('assessment.download_report') + '</button>' +
+      '<button class="btn btn-ghost" id="btn-share-results">' + t('assessment.copy_summary') + '</button>' +
       '</div>' +
       '</div>';
 
     // Disclaimer
     html +=
-      '<p class="results-disclaimer">This assessment provides an indicative readiness overview only. It does not constitute legal advice, a compliance certification, or a formal audit. Consult qualified legal and compliance professionals for formal assessments.</p>';
+      '<p class="results-disclaimer">' + t('assessment.results_disclaimer') + '</p>';
 
     $('results-container').innerHTML = html;
 
@@ -1231,9 +1274,9 @@
           navigator.clipboard
             .writeText(text)
             .then(function () {
-              shareBtn.textContent = 'Copied!';
+              shareBtn.textContent = t('assessment.copied');
               setTimeout(function () {
-                shareBtn.textContent = 'Copy Summary';
+                shareBtn.textContent = t('assessment.copy_summary');
               }, 2000);
             })
             .catch(function () {
