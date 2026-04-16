@@ -407,6 +407,7 @@
   },
   "demo": {
     "meta_title": "KI-Chat-Demo – Prunex",
+    "warning_notice": "Diese Demo hat nur eingeschränkte Funktionen. Für eine vollständige Vorstellung <a href=\"contact.html\">kontaktieren Sie uns</a>.",
     "sidebar_eyebrow": "Demo-Arbeitsbereich",
     "sidebar_title": "Ganzseitige KI-Chat-Demo",
     "sidebar_desc": "Wählen Sie ein LLM und starten Sie eine gesteuerte Chat-Sitzung.",
@@ -431,7 +432,10 @@
     "attachment_reply": "Datei im Demo-Modus empfangen. Verbinden Sie Backend-Speicher, um Anhänge zu verarbeiten.",
     "chat_status_sending": "Sende an Compliance-Gateway...",
     "no_response": "Keine Antwort erhalten.",
-    "error_sending": "Unerwarteter Fehler beim Senden der Chat-Nachricht."
+    "error_sending": "Unerwarteter Fehler beim Senden der Chat-Nachricht.",
+    "gateway_error_blocked": "Blockiert: PII erkannt. Der Inhalt entspricht nicht den Unternehmensrichtlinien und den Datenschutzvorgaben der EU-KI-Verordnung.",
+    "gateway_error_blocked_policy": "Nachricht durch die Richtlinie {policy} blockiert. Entfernen Sie eingeschränkte oder sensible Inhalte und versuchen Sie es erneut.",
+    "gateway_error_generic": "Gateway-Anfrage mit Status {status} fehlgeschlagen."
   },
   "assessment": {
     "landing_title": "Wie bereit ist Ihre Organisation für KI- und Daten-Compliance?",

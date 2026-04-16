@@ -407,6 +407,7 @@
   },
   "demo": {
     "meta_title": "AI Chat Demo - Prunex",
+    "warning_notice": "This demo has limited features. For a full walkthrough, <a href=\"contact.html\">contact us</a>.",
     "sidebar_eyebrow": "Demo Workspace",
     "sidebar_title": "Full-page AI chat",
     "sidebar_desc": "Select an LLM, then start a governed chat session.",
@@ -431,7 +432,10 @@
     "attachment_reply": "File received in demo mode. Connect backend storage to process attachments.",
     "chat_status_sending": "Sending to compliance gateway...",
     "no_response": "No response received.",
-    "error_sending": "Unexpected error while sending chat message."
+    "error_sending": "Unexpected error while sending chat message.",
+    "gateway_error_blocked": "Blocked: PII detected. Content does not comply with company policy and EU AI Act privacy guidelines.",
+    "gateway_error_blocked_policy": "Message blocked by policy {policy}. Remove restricted or sensitive content and try again.",
+    "gateway_error_generic": "Gateway request failed with status {status}."
   },
   "assessment": {
     "landing_title": "How ready is your organisation for AI and data compliance?",

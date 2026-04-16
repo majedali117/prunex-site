@@ -311,7 +311,7 @@
             <svg class="demo-warning-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path fill="currentColor" d="M12 2 1 21h22L12 2zm0 5.7 6.37 11.3H5.63L12 7.7zM11 10v4h2v-4zm0 5.5v2h2v-2z"></path>
             </svg>
-            <div>
+            <div data-i18n-html="demo.warning_notice">
               This demo has limited features. For a full walkthrough, <a href="contact.html">contact us</a>.
             </div>
           </div>
@@ -401,6 +401,14 @@
       if (!chatForm || !chatInput || !chatSend || !chatAttach || !chatFileInput || !chatMessages || !llmOptionsWrap || !chatStatus || !clearChat) return;
 
       const t = (key) => window.i18n ? window.i18n.t(key) : key;
+      const formatText = (key, replacements) => {
+        let text = t(key);
+        if (!replacements) return text;
+        Object.keys(replacements).forEach((name) => {
+          text = text.replace(`{${name}}`, replacements[name]);
+        });
+        return text;
+      };
       let selectedLlm = null;
       let isSending = false;
       let runtimeSessionId = createRuntimeSessionId();
@@ -448,6 +456,30 @@
         return cleanText.trim();
       };
 
+      const formatGatewayError = (status, rawText) => {
+        let parsed;
+
+        try {
+          parsed = JSON.parse(rawText);
+        } catch (error) {
+          parsed = null;
+        }
+
+        const detail = parsed && parsed.detail ? parsed.detail : null;
+        const policyName =
+          (detail && typeof detail === 'object' && detail.blocking_policy) ||
+          (parsed && parsed.blocking_policy) ||
+          null;
+
+        if (status === 400) {
+          return policyName
+            ? formatText('demo.gateway_error_blocked_policy', { policy: policyName })
+            : t('demo.gateway_error_blocked');
+        }
+
+        return formatText('demo.gateway_error_generic', { status: String(status) });
+      };
+
       const precheckCompliance = async (prompt, userId) => {
         const response = await fetch(COMPLIANCE_GATEWAY_URL, {
           method: 'POST',
@@ -462,7 +494,7 @@
 
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(`Compliance gateway error: ${response.status} ${errorText}`);
+          throw new Error(formatGatewayError(response.status, errorText));
         }
 
         return response.json();
