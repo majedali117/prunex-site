@@ -99,6 +99,18 @@
       color: var(--green);
     }
 
+    .llm-option:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      color: var(--text-muted);
+      background: var(--gray-50);
+    }
+
+    .llm-option:disabled:hover {
+      border-color: var(--border);
+      color: var(--text-muted);
+    }
+
     .llm-option.active {
       border-color: var(--green);
       background: var(--gray-50);
@@ -179,14 +191,22 @@
       word-break: break-word;
     }
 
+    .chat-msg-row {
+      display: grid;
+      gap: 4px;
+      justify-items: start;
+    }
+
+    .chat-msg-row.user {
+      justify-items: end;
+    }
+
     .chat-msg.user {
-      justify-self: end;
       background: var(--green);
       color: var(--white);
     }
 
     .chat-msg.bot {
-      justify-self: start;
       background: var(--gray-100);
       color: var(--text-primary);
     }
@@ -195,6 +215,13 @@
       border: 1px solid #e7bcbc;
       background: #fff4f4;
       color: #6e1f1f;
+    }
+
+    .chat-msg-meta {
+      font-size: 0.75rem;
+      line-height: 1.2;
+      color: var(--text-muted);
+      padding: 0 2px;
     }
 
     .chat-input-wrap {
@@ -317,17 +344,11 @@
           </div>
 
           <div>
-            <span class="eyebrow" data-i18n="demo.sidebar_eyebrow">Demo Workspace</span>
-            <h2 data-i18n="demo.sidebar_title">Full-page AI chat</h2>
-            <p data-i18n="demo.sidebar_desc">Select an LLM, then start a governed chat session.</p>
-          </div>
-
-          <div>
-            <div class="chip" data-i18n="demo.model_selection">Model Selection</div>
-            <div class="llm-options" id="llm-options" style="margin-top: 12px;">
-              <button type="button" class="llm-option" data-llm="ChatGPT">ChatGPT</button>
-              <button type="button" class="llm-option" data-llm="Gemini">Gemini</button>
-              <button type="button" class="llm-option" data-llm="Claude">Claude</button>
+            <div class="llm-options" id="llm-options">
+              <button type="button" class="llm-option active" data-llm="Kimi 2.5">Kimi 2.5</button>
+              <button type="button" class="llm-option" data-llm="ChatGPT" disabled>ChatGPT</button>
+              <button type="button" class="llm-option" data-llm="Gemini" disabled>Gemini</button>
+              <button type="button" class="llm-option" data-llm="Claude" disabled>Claude</button>
             </div>
           </div>
 
@@ -409,15 +430,33 @@
         });
         return text;
       };
-      let selectedLlm = null;
+      let selectedLlm = 'Kimi 2.5';
       let isSending = false;
       let runtimeSessionId = createRuntimeSessionId();
 
-      const addMessage = (text, type, blocked) => {
+      const formatResponseTime = (durationMs) => {
+        if (typeof durationMs !== 'number' || Number.isNaN(durationMs) || durationMs < 0) return '';
+        if (durationMs < 1000) return `${Math.round(durationMs)} ms`;
+        return `${(durationMs / 1000).toFixed(2)} s`;
+      };
+
+      const addMessage = (text, type, blocked, metaText) => {
+        const row = document.createElement('div');
+        row.className = `chat-msg-row ${type}`;
+
         const msg = document.createElement('div');
         msg.className = `chat-msg ${type}${blocked ? ' blocked' : ''}`;
         msg.textContent = text;
-        chatMessages.appendChild(msg);
+        row.appendChild(msg);
+
+        if (metaText) {
+          const meta = document.createElement('div');
+          meta.className = 'chat-msg-meta';
+          meta.textContent = metaText;
+          row.appendChild(meta);
+        }
+
+        chatMessages.appendChild(row);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       };
 
@@ -425,10 +464,6 @@
         const seed = `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
         return (seed + 'ollamachatsessionseedvalue').slice(0, 48);
       }
-
-      const addIntro = () => {
-        addMessage(t('demo.welcome_msg'), 'bot');
-      };
 
       const setChatEnabled = (enabled) => {
         const interactive = enabled && !isSending;
@@ -481,6 +516,7 @@
       };
 
       const precheckCompliance = async (prompt, userId) => {
+        const startedAt = performance.now();
         const response = await fetch(COMPLIANCE_GATEWAY_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -488,34 +524,45 @@
             prompt,
             user_id: userId,
             response_mode: 'llm',
+            metadata: {
+              max_tokens: 64
+            },
             input_mode: 'enforce'
           })
         });
+        const rawText = await response.text();
+        const responseTimeMs = performance.now() - startedAt;
 
         if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(formatGatewayError(response.status, errorText));
+          const error = new Error(formatGatewayError(response.status, rawText));
+          error.responseTimeMs = responseTimeMs;
+          throw error;
         }
 
-        return response.json();
+        const body = JSON.parse(rawText);
+        return {
+          responseTimeMs,
+          body
+        };
       };
 
       const sendMessage = async (prompt, sessionId) => {
-        const gatewayResponse = await precheckCompliance(prompt, sessionId);
+        const { body: gatewayResponse, responseTimeMs } = await precheckCompliance(prompt, sessionId);
 
         return {
           blocked: gatewayResponse.status !== 'ALLOWED',
-          message: cleanResponse(gatewayResponse.content || 'No response received from compliance gateway.')
+          message: cleanResponse(gatewayResponse.content || 'No response received from compliance gateway.'),
+          responseTimeMs
         };
       };
 
       llmButtons.forEach((button) => {
         button.addEventListener('click', () => {
+          if (button.disabled) return;
           selectedLlm = button.getAttribute('data-llm');
           llmButtons.forEach((btn) => btn.classList.toggle('active', btn === button));
           chatStatus.textContent = `${t('demo.chat_status_using')} ${selectedLlm}`;
           setChatEnabled(true);
-          addMessage(`${t('demo.model_selected')} ${selectedLlm}. ${t('demo.model_selected_suffix')}`, 'bot');
           chatInput.focus();
         });
       });
@@ -537,10 +584,12 @@
 
         try {
           const result = await sendMessage(message, runtimeSessionId);
-          addMessage(result.message || t('demo.no_response'), 'bot', result.blocked);
+          addMessage(result.message || t('demo.no_response'), 'bot', result.blocked, formatResponseTime(result.responseTimeMs));
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : t('demo.error_sending');
-          addMessage(errorMessage, 'bot', true);
+          const responseTimeMs =
+            error && typeof error === 'object' && 'responseTimeMs' in error ? error.responseTimeMs : null;
+          addMessage(errorMessage, 'bot', true, formatResponseTime(responseTimeMs));
         } finally {
           setBusy(false);
           chatInput.focus();
@@ -572,7 +621,6 @@
       clearChat.addEventListener('click', () => {
         chatMessages.innerHTML = '';
         runtimeSessionId = createRuntimeSessionId();
-        addIntro();
       });
 
       // Defer initialization until i18n is ready
@@ -580,9 +628,9 @@
       const doInit = () => {
         if (!initialized) {
           initialized = true;
-          setChatEnabled(false);
+          chatStatus.textContent = `${t('demo.chat_status_using')} ${selectedLlm}`;
+          setChatEnabled(true);
           autoResizeInput();
-          addIntro();
         }
       };
 
